@@ -1,0 +1,12 @@
+/* Generated from the XML, %s */
+package %s;
+
+import java.nio.ByteBuffer;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
+import edu.nps.moves.dis.*;
+
+/* %s marshal size %s */
+public enum %s implements Marshaller
+{

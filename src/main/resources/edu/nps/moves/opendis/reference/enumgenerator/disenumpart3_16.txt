@@ -1,0 +1,50 @@
+    public void marshal(DataOutputStream dos)
+    {
+        try {
+            dos.writeShort(getValue());
+        }
+        catch(Exception ex) {
+            System.err.println(ex.getClass().getSimpleName()+": "+ex.getMessage());
+        }
+    }
+
+    public void unmarshal(DataInputStream dis)
+    {
+        try {
+            value = dis.readUnsignedShort();
+        }
+        catch(Exception ex) {
+            showError(ex);
+        }
+    } 
+
+    public void marshal(ByteBuffer buff)
+    {
+        try {
+            buff.putShort((short)getValue());
+        }
+       catch(Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void unmarshal(ByteBuffer buff)
+    {
+        try {
+            value = (int)buff.getShort();
+        }
+        catch(Exception ex) {
+            showError(ex);
+        }
+    }
+    
+    public int getMarshalledSize()
+    {
+        return 2; // 16 bits
+    }
+
+    private void showError(Exception ex)
+    {
+        System.err.println(ex.getClass().getSimpleName()+": "+ex.getMessage());
+    }
+}

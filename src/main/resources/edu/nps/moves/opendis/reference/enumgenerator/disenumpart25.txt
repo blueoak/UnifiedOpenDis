@@ -1,0 +1,28 @@
+    private int value;
+    private String description;
+
+    %s(int value, String description)
+    {
+        this.value = value;
+        this.description = description;
+    }
+
+    public int getValue()
+    {
+        return value;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    public static %s getEnumerationForValue(int i) throws EnumNotFoundException
+    {
+       for(%s val: values()) {
+          if(val.getValue()==i)
+              return val;
+       }
+       throw new EnumNotFoundException("no enumeration found for value " + i + " of enumeration %s");
+    }
+

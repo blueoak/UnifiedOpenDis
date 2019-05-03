@@ -1,0 +1,48 @@
+package %s;
+
+public class EntityTypeFactory {
+
+    /*******************************************************/
+    public static EntityType create(EntityKind kind)
+    {
+      return new EntityType()
+          .setEntityKind(kind.getByteValue());
+    }
+
+    public static EntityType create(EntityKind kind, PlatformDomain domain)
+    {
+      return create(kind)
+          .setDomain(domain.getByteValue());
+    }
+
+    public static EntityType create(EntityKind kind, MunitionDomain domain)
+    {
+      return create(kind)
+          .setDomain(domain.getByteValue());
+    }
+
+    public static EntityType create(EntityKind kind, SupplyDomain domain)
+    {
+      return create(kind)
+          .setDomain(domain.getByteValue());
+    }
+
+    public static EntityType create(EntityKind kind, PlatformDomain domain, Country country)
+    {
+      return create(kind, domain)
+          .setCountry(country.getShortValue());
+    }
+
+    public static EntityType create(EntityKind kind, MunitionDomain domain, Country country)
+    {
+      return create(kind, domain)
+          .setCountry(country.getShortValue());
+    }
+
+    public static EntityType create(EntityKind kind, SupplyDomain domain, Country country)
+    {
+      return create(kind, domain)
+          .setCountry(country.getShortValue());
+    }
+    /*******************************************************/
+
