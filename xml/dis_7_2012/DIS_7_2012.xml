@@ -1042,11 +1042,43 @@
         </attribute>
     
         <attribute name="domain" comment="Domain of entity (air, surface, subsurface, space, etc)">
-            <primitive type="uint8"/>
+            <sisoenum type="Domain" comment="can be PlatformDomain or MunitionDomain; not an enum"/>
         </attribute>
     
         <attribute name="country" comment="country to which the design of the entity is attributed" >
             <sisoenum type="Country" comment="uid 29"/>
+        </attribute>
+    
+        <attribute name="category" comment="category of entity">
+            <sisoenum type="Category" comment="not single enum"/>
+        </attribute>
+    
+        <attribute name="subcategory" comment="subcategory of entity">
+            <sisoenum type="SubCategory" comment="not single enum"/>
+        </attribute>
+    
+        <attribute name="specific" comment="specific info based on subcategory field. Renamed from specific because that is a reserved word in SQL.">
+            <sisoenum type="Specific" comment="not single enum"/>
+        </attribute>
+    
+        <attribute name="extra">
+            <sisoenum type="Extra" comment="not single enum"/>
+        </attribute>
+    
+    </class>
+    
+    <class name="EntityTypeRaw" inheritsFrom="root" comment="Identifies the type of Entity">
+    
+        <attribute name="entityKind" comment="Kind of entity">
+            <sisoenum type="EntityKind" comment="uid 7"/>
+        </attribute>
+    
+        <attribute name="domain" comment="Domain of entity (air, surface, subsurface, space, etc)">
+            <primitive type="uint8"/>
+        </attribute>
+    
+        <attribute name="country" comment="country to which the design of the entity is attributed" >
+            <primitive type="uint16"/>
         </attribute>
     
         <attribute name="category" comment="category of entity">
@@ -1655,6 +1687,26 @@
     </class>
 
     <class name="JammingTechnique" inheritsFrom="root" comment="Jamming technique. Section 6.2.49, uid 284">
+
+        <attribute name="kind">
+            <sisoenum type="JammerKind"/>
+        </attribute>
+     
+        <attribute name="category">
+            <sisoenum type="JammerCategory"/>
+        </attribute>
+     
+        <attribute name="subcategory">
+            <sisoenum type="JammerSubCategory"/>
+        </attribute>
+     
+        <attribute name="specific">
+            <sisoenum type="JammerSpecific"/>
+        </attribute>
+
+    </class>
+    
+    <class name="JammingTechniqueRaw" inheritsFrom="root" comment="Jamming technique. Section 6.2.49, uid 284">
 
         <attribute name="kind">
             <primitive type="uint8"/>

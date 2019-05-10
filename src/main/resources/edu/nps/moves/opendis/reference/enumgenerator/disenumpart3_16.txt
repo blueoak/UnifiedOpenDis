@@ -1,23 +1,26 @@
+    @Override
     public void marshal(DataOutputStream dos)
     {
         try {
             dos.writeShort(getValue());
         }
-        catch(Exception ex) {
+        catch(IOException ex) {
             System.err.println(ex.getClass().getSimpleName()+": "+ex.getMessage());
         }
     }
 
+    @Override
     public void unmarshal(DataInputStream dis)
     {
         try {
             value = dis.readUnsignedShort();
         }
-        catch(Exception ex) {
+        catch(IOException ex) {
             showError(ex);
         }
     } 
 
+    @Override
     public void marshal(ByteBuffer buff)
     {
         try {
@@ -28,6 +31,7 @@
         }
     }
 
+    @Override
     public void unmarshal(ByteBuffer buff)
     {
         try {
@@ -38,6 +42,7 @@
         }
     }
     
+    @Override
     public int getMarshalledSize()
     {
         return 2; // 16 bits
