@@ -1,48 +1,28 @@
 package %s;
 
+import edu.nps.moves.dis.EntityType;
+import edu.nps.moves.dis.Domain;
+
 public class EntityTypeFactory {
 
     /*******************************************************/
     public static EntityType create(EntityKind kind)
     {
       return new EntityType()
-          .setEntityKind(kind.getByteValue());
+          .setEntityKind(kind);
     }
 
-    public static EntityType create(EntityKind kind, PlatformDomain domain)
+    public static EntityType create(EntityKind kind, Domain domain)
     {
-      return create(kind)
-          .setDomain(domain.getByteValue());
+        return create(kind)
+            .setDomain(domain);
     }
 
-    public static EntityType create(EntityKind kind, MunitionDomain domain)
-    {
-      return create(kind)
-          .setDomain(domain.getByteValue());
-    }
-
-    public static EntityType create(EntityKind kind, SupplyDomain domain)
-    {
-      return create(kind)
-          .setDomain(domain.getByteValue());
-    }
-
-    public static EntityType create(EntityKind kind, PlatformDomain domain, Country country)
+    public static EntityType create(EntityKind kind, Domain domain, Country country)
     {
       return create(kind, domain)
-          .setCountry(country.getShortValue());
+          .setCountry(country);
     }
 
-    public static EntityType create(EntityKind kind, MunitionDomain domain, Country country)
-    {
-      return create(kind, domain)
-          .setCountry(country.getShortValue());
-    }
-
-    public static EntityType create(EntityKind kind, SupplyDomain domain, Country country)
-    {
-      return create(kind, domain)
-          .setCountry(country.getShortValue());
-    }
     /*******************************************************/
 
