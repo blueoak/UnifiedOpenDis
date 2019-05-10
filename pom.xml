@@ -150,10 +150,10 @@
                                 <include>sisoEntities/java/edu/nps/moves/dis/jammers/**</include>
                             </includes>
                             <excludes>
-                                <exclude>enums/java/edu/nps/moves/dis/enumerations</exclude>
-                                <exclude>pdusAndEntities/java/edu/nps/moves/dis</exclude>
-                                <exclude>sisoEntities/java/edu/nps/moves/dis/entities</exclude> 
-                                <exclude>sisoEntities/java/edu/nps/moves/dis/jammers</exclude>                             
+                                <exclude>enums/java/edu/nps/moves/dis/enumerations/.keep</exclude>
+                                <exclude>pdusAndEntities/java/edu/nps/moves/dis/.keep</exclude>
+                                <exclude>sisoEntities/java/edu/nps/moves/dis/entities/.keep</exclude> 
+                                <exclude>sisoEntities/java/edu/nps/moves/dis/jammers/.keep</exclude>                             
                             </excludes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
