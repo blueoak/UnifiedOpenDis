@@ -1,5 +1,5 @@
 
-    private String description;
+    private final String description;
 
     %s(String description)
     {

@@ -1,5 +1,6 @@
+
     private int value;
-    private String description;
+    private final String description;
 
     %s(int value, String description)
     {
