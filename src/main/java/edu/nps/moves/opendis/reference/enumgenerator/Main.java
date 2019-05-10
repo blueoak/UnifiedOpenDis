@@ -19,6 +19,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/*import edu.nps.moves.dis.*;
+import edu.nps.moves.dis.enumerations.MunitionDomain;
+import edu.nps.moves.dis.enumerations.PlatformDomain;
+import edu.nps.moves.dis.enumerations.SupplyDomain;
+import edu.nps.moves.dis.enumerations.Country;
+import edu.nps.moves.dis.enumerations.EntityKind;*/
+
 /**
  * Main.java created on Apr 16, 2019 MOVES Institute Naval Postgraduate School, Monterey, CA, USA www.nps.edu
  *
@@ -29,6 +36,7 @@ public class Main
 {
     private File outputDirectory;
     private Properties uid2ClassName;
+    private Properties interfaceInjection;
     private String packageName;
     private String xmlPath;
     
@@ -46,10 +54,10 @@ public class Main
     private String bitsetTemplate16;
     private String bitsetTemplate2;
     
-    private String entityTemplate1;
-    private String entityTemplate2; 
+    //private String entityTemplate1;
+    //private String entityTemplate2; 
     
-    private File entityTypeFactory = null;
+    //private File entityTypeFactory = null;
     private FileWriter entityFileWriter = null;
     
     private String specTitleDate = null;
@@ -65,7 +73,8 @@ public class Main
     {
         uid2ClassName = new Properties();
         uid2ClassName.load(getClass().getResourceAsStream("Uid2ClassName.properties"));
-    
+        interfaceInjection = new Properties();
+        interfaceInjection.load(getClass().getResourceAsStream("interfaceInjection.properties"));
         loadEnumTemplates();
 
         /*
@@ -104,8 +113,8 @@ public class Main
             dictEnumTemplate1 = loadOneTemplate("disdictenumpart1.txt");
             dictEnumTemplate2 = loadOneTemplate("disdictenumpart2.txt");
             dictEnumTemplate3 = loadOneTemplate("disdictenumpart3.txt");
-            entityTemplate1 = loadOneTemplate("entityTypeFactoryTemplate1.txt");
-            entityTemplate2 = loadOneTemplate("entityTypeFactoryTemplate2.txt");
+          //  entityTemplate1 = loadOneTemplate("entityTypeFactoryTemplate1.txt");
+          //  entityTemplate2 = loadOneTemplate("entityTypeFactoryTemplate2.txt");
             bitsetTemplate1 = loadOneTemplate("disbitset1.txt");
             bitsetTemplate15= loadOneTemplate("disbitset15.txt");
             bitsetTemplate16= loadOneTemplate("disbitset16.txt");
@@ -147,7 +156,7 @@ public class Main
         String value;
         String description;
     }
-    
+    /*
     class EntityElem
     {
         String kind;
@@ -176,6 +185,7 @@ public class Main
         String description;
         String uid;
     }
+    */
     class BitfieldElem
     {
         String name;
@@ -197,11 +207,11 @@ public class Main
         EnumElem currentEnum;
         EnumRowElem currentEnumRow;
         boolean inCot = false;
-        ArrayList<EntityElem> entities = new ArrayList<>();
-        EntityElem currentEntity;
-        CategoryElem currentCategory;
-        SubCategoryElem currentSubCategory;
-        SpecificElem currentSpecific;
+        //ArrayList<EntityElem> entities = new ArrayList<>();
+        //EntityElem currentEntity;
+        //CategoryElem currentCategory;
+        //SubCategoryElem currentSubCategory;
+        //SpecificElem currentSpecific;
         ArrayList<DictionaryElem> dictionaries = new ArrayList<>();
         DictionaryElem currentDict;
         DictionaryRowElem currentDictRow;
@@ -273,7 +283,7 @@ public class Main
                     currentDictRow.description = attributes.getValue("description");
                     currentDict.elems.add(currentDictRow);
                     break;
-                    
+         /*           
                 case "entity":
                     currentEntity=new EntityElem();
                     currentEntity.kind = attributes.getValue("kind");
@@ -319,7 +329,7 @@ public class Main
                     currentSpecific.uid = attributes.getValue("uid");
                     currentSubCategory.specifics.add(currentSpecific);
                     break;
-                    
+              */      
                 case "cet":
                 case "copyright":
                 case "cot": //uid 228
@@ -375,7 +385,7 @@ public class Main
                     currentDictRow = null;
                     break;
                     
-                case "entity":
+               /* case "entity":
                     if(currentEntity != null)
                       writeOutEntity(currentEntity);
                     currentEntity=null;
@@ -391,7 +401,7 @@ public class Main
                 case "specific_range":
                     currentSpecific = null;
                     break;
-                
+                */
                 case "cet":
                 case "copyright":
                     break;
@@ -446,7 +456,12 @@ public class Main
             StringBuilder sb = new StringBuilder();
             
             // Header section
-            sb.append(String.format(dictEnumTemplate1, specTitleDate, packageName, "UID "+el.uid, clsName));
+            String additionalInterface = "";
+            String otherIf = interfaceInjection.getProperty(clsName);
+            if(otherIf != null)
+                additionalInterface = ", "+otherIf;
+            
+            sb.append(String.format(dictEnumTemplate1, specTitleDate, packageName, "UID "+el.uid, clsName, additionalInterface));
             
             dictNames.clear();
             // enum section
@@ -532,7 +547,12 @@ public class Main
             StringBuilder sb = new StringBuilder();
             
             // Header section
-            sb.append(String.format(enumTemplate1, specTitleDate, packageName, "UID "+el.uid, el.size, clsName));
+            String additionalInterface = "";
+            String otherIf = interfaceInjection.getProperty(clsName);
+            if(otherIf != null)
+                additionalInterface = ", "+otherIf;
+            
+            sb.append(String.format(enumTemplate1, specTitleDate, packageName, "UID "+el.uid, el.size, clsName, additionalInterface));
             
             enumNames.clear();
             // enum section
@@ -578,12 +598,10 @@ public class Main
                 ex.printStackTrace();
             }
         }
-
+/*
         private void writeOutEntity(EntityElem elem)
-        {}
-       /* private void readWriteOutEntity(EntityElem elem)
         {
-            try {
+           try {
                 if (entityTypeFactory == null) {
                     entityTypeFactory = new File(outputDirectory, "EntityTypeFactory.java");
 
@@ -652,8 +670,8 @@ public class Main
             catch (EnumNotFoundException | IOException ex) {
                 ex.printStackTrace();
             }
-        }*/
-      
+        }
+      */
         private String createEnumName(String s)
         {
             String r = s.toUpperCase();
@@ -695,7 +713,8 @@ public class Main
         }
           
         private String indent = "    ";
-      /*  private String makeComment(EntityKind kind, EntityElem elem, CategoryElem category, SubCategoryElem subcategory, SpecificElem specific)
+  /*
+        private String makeComment(EntityKind kind, EntityElem elem, CategoryElem category, SubCategoryElem subcategory, SpecificElem specific)
         {
             StringBuilder sb = new StringBuilder();//indent);
 
@@ -737,6 +756,7 @@ public class Main
               s = s1+"\n "+indent+s2;
             }
             return s;
+
         }
 */
         String maybeSpecialCase(String s, String dflt)
