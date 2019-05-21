@@ -1,34 +1,11 @@
-package edu.nps.moves.dis.jammers.Deception;
 package %s;
 
-import edu.nps.moves.dis.jammers.JammerKind;
+import %s.%s;
 
-abstract public class Base extends edu.nps.moves.dis.JammingTechnique
-abstract public class Base extends edu.nps.moves.dis.jammers.
-
+abstract public class Base extends %s
 {
     public Base()
     {
-    	setKind(JammerKind.Deception);
+    	set%s(%s.%s);
     }
 }
-
-lower Bases:
-
-package edu.nps.moves.dis.jammers.Deception;
-package %s;
-
-import edu.nps.moves.dis.jammers.JammerKind;
-import %s.Base;
-abstract public class Base extends edu.nps.moves.dis.JammingTechnique
-abstract public class Base extends edu.nps.moves.dis.jammers.
-
-{
-    public Base()
-    {
-    	setKind(JammerKind.Deception);
-        set%s(%s);
-    }
-}
-
-format(jammerbase, pkg, pkg-1BaseorJammerKind, pkg-1,kindCategorySubOrSpec, enumWhich);

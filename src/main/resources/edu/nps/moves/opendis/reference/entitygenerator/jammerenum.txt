@@ -1,0 +1,97 @@
+package %s;
+
+import java.nio.ByteBuffer;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import edu.nps.moves.dis.*;
+
+/* marshal size 8 bits*/
+public enum %s implements edu.nps.moves.dis.%s
+{
+%s;
+
+    private int value;
+    private final String description;
+
+    %s(int value, String description)
+    {
+        this.value = value;
+        this.description = description;
+    }
+
+    public int getValue()
+    {
+        return value;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    public static %s getEnumerationForValue(int i) throws EnumNotFoundException
+    {
+       for(%s val: values()) {
+          if(val.getValue()==i)
+              return val;
+       }
+       throw new EnumNotFoundException("no enumeration found for value " + i + " of enumeration %s");
+    }
+
+    @Override
+    public void marshal(DataOutputStream dos)
+    {
+        try {
+            dos.writeByte(getValue());
+        }
+        catch(IOException ex) {
+            System.err.println(ex.getClass().getSimpleName()+": "+ex.getMessage());
+        }
+    }
+    
+    @Override
+    public void unmarshal(DataInputStream dis)
+    {
+        try {
+            value = dis.readUnsignedByte();
+        }
+        catch(IOException ex) {
+            showError(ex);
+        }
+    } 
+
+    @Override
+    public void marshal(ByteBuffer buff)
+    {
+        try {
+            buff.put((byte)getValue());
+        }
+       catch(Exception ex) {
+            showError(ex);
+        }
+    }
+
+    @Override
+    public void unmarshal(ByteBuffer buff)
+    {
+        try {
+            value = (int)buff.get();
+        }
+        catch(Exception ex) {
+            showError(ex);
+        }
+    }
+
+    @Override
+    public int getMarshalledSize()
+    {
+        return 1; // 8 bits
+    }
+
+    private void showError(Exception ex)
+    {
+        System.err.println(ex.getClass().getSimpleName()+": "+ex.getMessage());
+    }
+}

@@ -1,11 +1,9 @@
-package edu.nps.moves.dis.jammers.Deception;
+package %s;
 
-public class Analyzer extends Base
+public class %s extends Base
 {
-    public Analyzer()
+    public %s()
     {
-        setCategory(Category.Analyzer);
+        set%s(%s.%s);
     }
 }
-
-
