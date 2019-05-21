@@ -8,12 +8,9 @@ package edu.nps.moves.opendis.reference.entitygenerator;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
@@ -21,65 +18,41 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.lang.reflect.Method;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-/*import edu.nps.moves.dis.enumerations.MunitionDomain;
-import edu.nps.moves.dis.enumerations.PlatformDomain;
-import edu.nps.moves.dis.enumerations.SupplyDomain;
-import edu.nps.moves.dis.enumerations.Country;
-import edu.nps.moves.dis.enumerations.EntityKind;
-*/
+
 /**
  * Main.java created on Apr 16, 2019 MOVES Institute Naval Postgraduate School, Monterey, CA, USA www.nps.edu
  *
  * @author Mike Bailey, jmbailey@nps.edu
  * @version $Id$
  */
+
 public class Main
 {
-    private File outputDirectory;
-    private Properties uid2ClassName;
-    private Properties interfaceInjection;
-    private String packageName;
-    private String xmlPath;
-    
-    private String enumTemplate1;
-    private String enumTemplate2;
-    private String enumTemplate25;
-    private String enumTemplate3_8;
-    private String enumTemplate3_16;
-    private String enumTemplate3_32;
-    private String dictEnumTemplate1;
-    private String dictEnumTemplate2;
-    private String dictEnumTemplate3;
-    private String bitsetTemplate1;
-    private String bitsetTemplate15;
-    private String bitsetTemplate16;
-    private String bitsetTemplate2;
-    
-    private String entityTemplate1;
-    private String entityTemplate2; 
-    
-    private File entityTypeFactory = null;
-    private FileWriter entityFileWriter = null;
-    
-    private String specTitleDate = null;
-    
+    private final File outputDirectory;
+    private final String basePackageName;
+    private final String xmlPath;
+
+    private final FileWriter entityFileWriter = null;
+
+    String entityClassTemplate;
+    String entityBaseTemplate;
+    String entityEnumTemplate;
+    String entityTypeTemplate;
+
     public Main(String xmlPath, String outputDir, String packageName)
     {
-        this.packageName = packageName;
+        this.basePackageName = packageName;
         this.xmlPath = xmlPath;
         outputDirectory = new File(outputDir);
     }
-    
+
     Enum platformDomains;
     Enum countries;
     Enum kinds;
-    
+
     Method platformDomainFromInt;
     Method platformDomainName;
     Method platformDomainDescription;
@@ -89,96 +62,86 @@ public class Main
     Method kindFromInt;
     Method kindName;
     Method kindDescription;
-    
+
     Method munitionDomainFromInt;
     Method munitionDomainName;
     Method munitionDomainDescription;
     Method supplyDomainFromInt;
     Method supplyDomainName;
     Method supplyDomainDescription;
-    
+
     // Don't put imports in code for this, needs to have enumerations built first; do it this way
     private void buildKindDomainCountryInstances()
     {
         Method[] ma;
         try {
-        ma = getEnumMethods("edu.nps.moves.dis.enumerations.PlatformDomain");
-        platformDomainFromInt = ma[FORVALUE];
-        platformDomainName = ma[NAME];
-        platformDomainDescription = ma[DESCRIPTION];
-        
-         ma = getEnumMethods("edu.nps.moves.dis.enumerations.Country");
-         countryFromInt = ma[FORVALUE];
-         countryName = ma[NAME];
-         countryDescription = ma[DESCRIPTION];
-         
-         ma = getEnumMethods("edu.nps.moves.dis.enumerations.EntityKind");
-         kindFromInt = ma[FORVALUE];
-         kindName = ma[NAME];
-         kindDescription = ma[DESCRIPTION];
-         
-         ma = getEnumMethods("edu.nps.moves.dis.enumerations.MunitionDomain");
-         munitionDomainFromInt = ma[FORVALUE];
-         munitionDomainName = ma[NAME];
-         munitionDomainDescription = ma[DESCRIPTION];
-         
-          ma = getEnumMethods("edu.nps.moves.dis.enumerations.SupplyDomain");
-         supplyDomainFromInt = ma[FORVALUE];
-         supplyDomainName = ma[NAME];
-         supplyDomainDescription = ma[DESCRIPTION];
+            ma = getEnumMethods("edu.nps.moves.dis.enumerations.PlatformDomain");
+            platformDomainFromInt = ma[FORVALUE];
+            platformDomainName = ma[NAME];
+            platformDomainDescription = ma[DESCRIPTION];
+
+            ma = getEnumMethods("edu.nps.moves.dis.enumerations.Country");
+            countryFromInt = ma[FORVALUE];
+            countryName = ma[NAME];
+            countryDescription = ma[DESCRIPTION];
+
+            ma = getEnumMethods("edu.nps.moves.dis.enumerations.EntityKind");
+            kindFromInt = ma[FORVALUE];
+            kindName = ma[NAME];
+            kindDescription = ma[DESCRIPTION];
+
+            ma = getEnumMethods("edu.nps.moves.dis.enumerations.MunitionDomain");
+            munitionDomainFromInt = ma[FORVALUE];
+            munitionDomainName = ma[NAME];
+            munitionDomainDescription = ma[DESCRIPTION];
+
+            ma = getEnumMethods("edu.nps.moves.dis.enumerations.SupplyDomain");
+            supplyDomainFromInt = ma[FORVALUE];
+            supplyDomainName = ma[NAME];
+            supplyDomainDescription = ma[DESCRIPTION];
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             throw new RuntimeException(ex.getLocalizedMessage());
         }
     }
-    private static int FORVALUE = 0;
-    private static int NAME = 1;
-    private static int DESCRIPTION = 2;
-    
+    private static final int FORVALUE = 0;
+    private static final int NAME = 1;
+    private static final int DESCRIPTION = 2;
+
     private Method[] getEnumMethods(String className) throws Exception
     {
         Method[] ma = new Method[3];
 
         Class<?> cls = Class.forName(className);
-        ma[FORVALUE]    = cls.getDeclaredMethod("getEnumerationForValue", int.class);
-        ma[NAME]        = cls.getMethod("name", (Class[])null);
-        ma[DESCRIPTION] = cls.getDeclaredMethod("getDescription", (Class[])null);
-/*
-        Object blah = ma[FORVALUE].invoke(null, 1);
-        String name = (String) ma[NAME].invoke(blah, null);
+        ma[FORVALUE] = cls.getDeclaredMethod("getEnumerationForValue", int.class);
+        ma[NAME] = cls.getMethod("name", (Class[]) null);
+        ma[DESCRIPTION] = cls.getDeclaredMethod("getDescription", (Class[]) null);
 
-        String description = (String) ma[DESCRIPTION].invoke(blah, null);
-*/
         return ma;
-
     }
-    
+
     String getDescription(Method enumGetter, Method descriptionGetter, int i) throws Exception
     {
-        Object enumObj = enumGetter.invoke(null, i);
-        return (String)descriptionGetter.invoke(enumObj, null);
+        Object enumObj = getEnum(enumGetter, i);
+        return (String) descriptionGetter.invoke(enumObj, (Object[]) null);
     }
-    
-    String getName(Method enumGetter, Method NameGetter, int i) throws Exception
+
+    String getName(Method enumGetter, Method nameGetter, int i) throws Exception
     {
-        Object enumObj = enumGetter.invoke(null, i);
-        return (String)NameGetter.invoke(enumObj, null);
+        Object enumObj = getEnum(enumGetter, i);
+        return (String) nameGetter.invoke(enumObj, (Object[]) null);
     }
-   
+
+    Object getEnum(Method enumGetter, int i) throws Exception
+    {
+        return enumGetter.invoke(null, i);
+    }
+
     private void run() throws SAXException, IOException, ParserConfigurationException
     {
+        loadEnumTemplates();
         buildKindDomainCountryInstances();
-        //uid2ClassName = new Properties();
-        //uid2ClassName.load(getClass().getResourceAsStream("Uid2ClassName.properties"));
-        //interfaceInjection = new Properties();
-        //interfaceInjection.load(getClass().getResourceAsStream("interfaceInjection.properties"));
-      //  loadEnumTemplates();
 
-        /*
-        for (Entry<Object, Object> ent : uid2ClassName.entrySet()) {
-            System.out.println(ent.getKey() + " " + ent.getValue());
-        }
-        */
         MyHandler handler = new MyHandler();
 
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -186,74 +149,33 @@ public class Main
         factory.setNamespaceAware(true);
         factory.setXIncludeAware(true);
         factory.newSAXParser().parse(new File(xmlPath), handler);
-
-        //System.out.println("Complete. " + handler.enums.size() + " enums created.");
-        /*
-        for (EnumElem ee : handler.enums) {
-            System.out.println("Created "+ee.uid + " \t" + ee.name);
-        }
-        
-        System.out.println("XML elements other than enum and enumrow :");
-        handler.testElems.forEach((s)->System.out.println(s));
-        */
     }
-    
+
     private void loadEnumTemplates()
     {
         try {
-            enumTemplate1 = loadOneTemplate("disenumpart1.txt");
-            enumTemplate2 = loadOneTemplate("disenumpart2.txt");
-            enumTemplate25 = loadOneTemplate("disenumpart25.txt");
-            enumTemplate3_32 = loadOneTemplate("disenumpart3_32.txt");
-            enumTemplate3_16 = loadOneTemplate("disenumpart3_16.txt");
-            enumTemplate3_8 = loadOneTemplate("disenumpart3_8.txt");
-            dictEnumTemplate1 = loadOneTemplate("disdictenumpart1.txt");
-            dictEnumTemplate2 = loadOneTemplate("disdictenumpart2.txt");
-            dictEnumTemplate3 = loadOneTemplate("disdictenumpart3.txt");
-            entityTemplate1 = loadOneTemplate("entityTypeFactoryTemplate1.txt");
-            entityTemplate2 = loadOneTemplate("entityTypeFactoryTemplate2.txt");
-            bitsetTemplate1 = loadOneTemplate("disbitset1.txt");
-            bitsetTemplate15= loadOneTemplate("disbitset15.txt");
-            bitsetTemplate16= loadOneTemplate("disbitset16.txt");
-            bitsetTemplate2 = loadOneTemplate("disbitset2.txt");
+            entityClassTemplate = loadOneTemplate("jammerclass.txt");
+            entityBaseTemplate = loadOneTemplate("jammerbase.txt");
+            entityEnumTemplate = loadOneTemplate("jammerenum.txt");
+            entityTypeTemplate = loadOneTemplate("entitytype.txt");
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
-    
+
     private String loadOneTemplate(String s) throws Exception
     {
         return new String(Files.readAllBytes(Paths.get(getClass().getResource(s).toURI())));
     }
-    /*
-    class EnumElem
+
+    class DescriptionElem
     {
-        String uid;
-        String name;
-        String size;
-        ArrayList<EnumRowElem> elems = new ArrayList<>();
-    }
-    
-    class EnumRowElem
-    {
-        String value;
         String description;
+        String pkgFromDescription;
+        String enumFromDescription;
     }
 
-    class DictionaryElem
-    {
-        String name;
-        String uid;
-        ArrayList<DictionaryRowElem> elems = new ArrayList<>();
-    }
-    
-    class DictionaryRowElem
-    {
-        String value;
-        String description;
-    }
-    */
     class EntityElem
     {
         String kind;
@@ -262,38 +184,38 @@ public class Main
         String uid;
         ArrayList<CategoryElem> categories = new ArrayList<>();
     }
-    class CategoryElem
+
+    class CategoryElem extends DescriptionElem
     {
         String value;
-        String description;
         String uid;
         ArrayList<SubCategoryElem> subcategories = new ArrayList<>();
         EntityElem parent;
     }
-    class SubCategoryElem
+
+    class SubCategoryElem extends DescriptionElem
     {
         String value;
-        String description;
         String uid;
         ArrayList<SpecificElem> specifics = new ArrayList<>();
         CategoryElem parent;
     }
-    class SpecificElem
+
+    class SpecificElem extends DescriptionElem
     {
         String value;
-        String description;
         String uid;
         ArrayList<ExtraElem> extras = new ArrayList<>();
         SubCategoryElem parent;
     }
-    class ExtraElem
+
+    class ExtraElem extends DescriptionElem
     {
         String value;
-        String description;
         String uid;
         SpecificElem parent;
     }
-   
+
     public class MyHandler extends DefaultHandler
     {
         ArrayList<EntityElem> entities = new ArrayList<>();
@@ -302,94 +224,110 @@ public class Main
         SubCategoryElem currentSubCategory;
         SpecificElem currentSpecific;
         ExtraElem currentExtra;
-              
-        HashSet<String> testElems = new HashSet<>();
-        
+
         boolean inCot = false;   // we don't want categories, subcategories, etc. from this group
+        boolean inCetUid30 = false;
+
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes)
         {
-            //String nuts = attributes.getValue("deprecated");
-            //if(qName.equals("category") && "true".equals(attributes.getValue("deprecated")))
-            //    return;
-            if(inCot)   // don't want anything in this group
+            if (inCot)   // don't want anything in this group
                 return;
-            
+
+            if (qName.equalsIgnoreCase("cet")) {
+                if (attributes.getValue("uid").equalsIgnoreCase("30"))
+                    inCetUid30 = true;
+                return;
+            }
+
+            if (!inCetUid30) // only want entities in this group, uid 30
+                return;
+
+            if (attributes.getValue("deprecated") != null)
+                return;
+
             switch (qName) {
                 case "cot":
-                    inCot=true;
+                    inCot = true;
                     break;
-                    
+
                 case "entity":
-                    currentEntity=new EntityElem();
+                    currentEntity = new EntityElem();
                     currentEntity.kind = attributes.getValue("kind");
                     currentEntity.domain = attributes.getValue("domain");
                     currentEntity.country = attributes.getValue("country");
                     currentEntity.uid = attributes.getValue("uid");
                     entities.add(currentEntity);
                     break;
-                    
+
                 case "category":
-                    if(currentEntity == null)
+                    if (currentEntity == null)
                         break;
+
                     currentCategory = new CategoryElem();
                     currentCategory.value = attributes.getValue("value");
                     currentCategory.description = attributes.getValue("description");
+                    setUniquePkgAndEmail(currentCategory, (List) currentEntity.categories);
                     currentCategory.uid = attributes.getValue("uid");
                     currentCategory.parent = currentEntity;
                     currentEntity.categories.add(currentCategory);
                     break;
-                    
-                case "subcategory":
-                case "subcategory_range":
+
                 case "subcategory_xref":
-                    if(currentCategory == null)
+                    printUnsupportedMessage("subcategory_xref", attributes.getValue("description"), currentCategory);
+                    break;
+
+                case "subcategory_range":
+                    printUnsupportedMessage("subcategory_range", attributes.getValue("description"), currentCategory);
+                    break;
+                case "subcategory":
+                    if (currentCategory == null)
                         break;
                     currentSubCategory = new SubCategoryElem();
-                    if(qName.equals("subcategory_xref"))
-                        currentSubCategory.value = attributes.getValue("xref");
-                    else
-                        currentSubCategory.value = attributes.getValue("value");
-
+                    currentSubCategory.value = attributes.getValue("value");
                     currentSubCategory.description = attributes.getValue("description");
+                    setUniquePkgAndEmail(currentSubCategory, (List) currentCategory.subcategories);
                     currentSubCategory.uid = attributes.getValue("uid");
                     currentSubCategory.parent = currentCategory;
                     currentCategory.subcategories.add(currentSubCategory);
                     break;
-                    
-                case "specific":
+
                 case "specific_range":
-                    if(currentSubCategory == null)
+                    printUnsupportedMessage("specific_range", attributes.getValue("description"), currentSubCategory);
+                    break;
+
+                case "specific":
+                    if (currentSubCategory == null)
                         break;
                     currentSpecific = new SpecificElem();
                     currentSpecific.value = attributes.getValue("value");
                     currentSpecific.description = attributes.getValue("description");
+                    setUniquePkgAndEmail(currentSpecific, (List) currentSubCategory.specifics);
                     currentSpecific.uid = attributes.getValue("uid");
                     currentSpecific.parent = currentSubCategory;
                     currentSubCategory.specifics.add(currentSpecific);
                     break;
-                    
+
                 case "extra":
-                    if(currentSpecific == null)
+                    if (currentSpecific == null)
                         break;
                     currentExtra = new ExtraElem();
                     currentExtra.value = attributes.getValue("value");
                     currentExtra.description = attributes.getValue("description");
+                    setUniquePkgAndEmail(currentExtra, (List) currentSpecific.extras);
                     currentExtra.uid = attributes.getValue("uid");
                     currentExtra.parent = currentSpecific;
                     currentSpecific.extras.add(currentExtra);
                     break;
-                    
-                default:
-                    testElems.add(qName);
 
+                default:
             }
         }
 
         @Override
         public void endElement(String uri, String localName, String qName)
         {
-            if(!qName.equals("cot") && inCot)
+            if (!qName.equals("cot") && inCot)
                 return;
 
             try {
@@ -397,50 +335,53 @@ public class Main
                     case "cot":
                         inCot = false;
                         break;
-                        
+
+                    case "cet":
+                        if (inCetUid30)
+                            inCetUid30 = false;
+                        break;
+
                     case "entity":
                         if (currentEntity != null) {
-                            writeBaseClasses(currentEntity);
+                            if (!currentEntity.categories.isEmpty())
+                                writeBaseClasses(currentEntity);
                             currentEntity = null;
                         }
-                        else
-                            System.out.println("endElement with no current element " + qName);
-
                         break;
 
                     case "category":
                         if (currentCategory != null) {
-                            writeBaseClasses(currentCategory);
+                            if (currentCategory.subcategories.isEmpty())
+                                writeFile(currentCategory);
+                            else
+                                writeBaseClasses(currentCategory);
                             currentCategory = null;
                         }
-                        else
-                            System.out.println("endElement with no current element " + qName);
+                        break;
 
+                    case "subcategory_xref":
+                    case "subcategory_range":
+                    case "specific_range":
                         break;
 
                     case "subcategory":
-                    case "subcategory_range":
                         if (currentSubCategory != null) {
-                            writeBaseClasses(currentSubCategory);
+                            if (currentSubCategory.specifics.isEmpty())
+                                writeFile(currentSubCategory);
+                            else
+                                writeBaseClasses(currentSubCategory);
                             currentSubCategory = null;
                         }
-                        else
-                            System.out.println("endElement with no current element " + qName);
-
                         break;
 
                     case "specific":
-                    case "specific_range":
                         if (currentSpecific != null) {
                             if (currentSpecific.extras.isEmpty())
-                                writeBaseClasses(currentSpecific);
-                            else
                                 writeFile(currentSpecific);
+                            else
+                                writeBaseClasses(currentSpecific);
                             currentSpecific = null;
                         }
-                        else
-                            System.out.println("endElement with no current element " + qName);
-
                         break;
 
                     case "extra":
@@ -448,20 +389,16 @@ public class Main
                             writeFile(currentExtra);
                             currentExtra = null;
                         }
-                        else
-                            System.out.println("endElement with no current element " + qName);
-
                         break;
 
                     default:
-                        testElems.add(qName);
                 }
             }
             catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
-        
+
         @Override
         public void endDocument() throws SAXException
         {
@@ -475,507 +412,507 @@ public class Main
                 }
             }
         }
-        
-        private void writeBaseClasses(EntityElem ent) throws Exception
-        {
-            StringBuilder sb = new StringBuilder();
-            buildPackagePath(ent, sb);
-            File dir = new File(outputDirectory,sb.toString());
-            dir.mkdirs();
-            File base = new File(dir,"Base.java");
-            base.createNewFile();
-            File category = new File(dir, "Category.java");
-            category.createNewFile();
-            System.out.println(sb.toString());
-        }
-        
-        private void writeBaseClasses(CategoryElem cat) throws Exception
-        {
-             StringBuilder sb = new StringBuilder();
-            buildPackagePath(cat, sb);
-            File dir = new File(outputDirectory,sb.toString());
-            dir.mkdirs();
-            File base = new File(dir,"Base.java");
-            base.createNewFile();
-            File category = new File(dir, "SubCategory.java");
-            category.createNewFile();
-        }
-        
-        private void writeBaseClasses(SubCategoryElem sub) throws Exception
-        {
-            StringBuilder sb = new StringBuilder();
-            buildPackagePath(sub, sb);
-            File dir = new File(outputDirectory,sb.toString());
-            dir.mkdirs();
-            File base = new File(dir,"Base.java");
-            base.createNewFile();
-            File category = new File(dir, "Specific.java");
-            category.createNewFile();
-        }
-        
-        private void writeBaseClasses(SpecificElem spec) throws Exception
-        {
-            StringBuilder sb = new StringBuilder();
-            buildPackagePath(spec, sb);
-            
-            File dir = new File(outputDirectory,sb.toString());
-            dir.mkdirs();
-            File base = new File(dir,"Base.java");
-            base.createNewFile();
-            File category = new File(dir, "Extra.java");
-            category.createNewFile();
-           
-        }
-        private void writeFile(SpecificElem spec) throws Exception
-        {
-            StringBuilder sb = new StringBuilder();
-            buildPackagePath(spec, sb);
-            
-            File dir = new File(outputDirectory,sb.toString());
-            dir.mkdirs();  
-            
-            File f = new File(dir,fixName(spec.description)+".java");
-            f.createNewFile();
-            
-            //todo fill properly
-            
-        }
-        private void writeFile(ExtraElem extra)
-        {
-            
-        }
-        Pattern regex = Pattern.compile("\\((.*?)\\)");
-        
-        private String buildCountryPackagePart(String s)
-        {
-            Matcher m = regex.matcher(s);
-            String fnd = null;
-            while(m.find()) {
-                fnd = m.group(1);
-                if(fnd.length()==3)
-                  break;
-                fnd=null;
+    }
+
+    private void setUniquePkgAndEmail(DescriptionElem elem, List<DescriptionElem> lis)
+    {
+        String mangledDescription = fixName(elem.description);
+        mangledDescription = makeUnique(mangledDescription, lis);
+        elem.pkgFromDescription = mangledDescription;
+        elem.enumFromDescription = mangledDescription.toUpperCase();
+    }
+
+    private String makeUnique(String s, List<DescriptionElem> lis)
+    {
+        String news = s;
+        for (int i = 1; i < 1000; i++) {
+            outer:
+            {
+                for (DescriptionElem hd : lis) {
+                    if (hd.pkgFromDescription.equalsIgnoreCase(news))
+                        break outer;
+                }
+                return news;
             }
-            if(fnd != null)
-                return fnd.toLowerCase();
-            
-           s = fixName(s);
-           s = s.toLowerCase();
-           if(s.length()>3)
-               return s.substring(0, 3);
-           else
-               return s;  
+            news = s + i;
         }
-        private String buidKindOrDomainPackagePart(String s)
+        throw new RuntimeException("Problem generating unique name for " + s);
+    }
+
+    private void writeBaseClasses(EntityElem ent) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(ent, sb);
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        int countryInt = Integer.parseInt(ent.country);
+        String countryNm = getName(countryFromInt, countryName, countryInt);
+
+        int domainInt = Integer.parseInt(ent.domain);
+        int kindInt = Integer.parseInt(ent.kind);
+
+        String entKindNm = getName(kindFromInt, kindName, kindInt);
+
+        String domainName;
+        String domainVal;
+        switch (entKindNm) {
+            case "MUNITION":
+                domainName = "MunitionDomain";
+                domainVal = getName(munitionDomainFromInt, munitionDomainName, domainInt);
+                break;
+            case "SUPPLY":
+                domainName = "SupplyDomain";
+                domainVal = getName(supplyDomainFromInt, supplyDomainName, domainInt);
+                break;
+            case "OTHER":
+            case "PLATFORM":
+            case "LIFE_FORM":
+            case "ENVIRONMENTAL":
+            case "CULTURAL_FEATURE":
+            case "RADIO":
+            case "EXPENDABLE":
+            case "SENSOR_EMITTER":
+            default:
+                domainName = "PlatformDomain";
+                domainVal = getName(platformDomainFromInt, platformDomainName, domainInt);
+                break;
+        }
+
+        String contents = String.format(entityTypeTemplate, pkg, countryNm, entKindNm, domainName, domainVal);
+        saveFile(dir, "Base.java", contents);
+
+        sb.setLength(0);
+        
+        if (ent.categories.isEmpty())
+            System.out.println("Entity w/ no cats: " + ent.country + " " + ent.domain + " " + ent.kind + " " + ent.uid);
+        
+        ent.categories.forEach((cat) -> {
+            String nm = cat.enumFromDescription;
+            if (!(nm.equals("DEPRECATED"))) {
+                sb.append("    ");
+                sb.append(nm);
+                sb.append(" (");
+                sb.append(cat.value);
+                sb.append(", \"");
+                sb.append(cat.description.replace('"', '\''));
+                sb.append("\"),\n");
+            }
+        });
+        sb.setLength(sb.length() - 2);
+
+        contents = String.format(entityEnumTemplate, pkg, "Category", "Category", sb.toString(), "Category", "Category", "Category", "Category");
+        saveFile(dir, "Category.java", contents);
+    }
+
+    private void writeBaseClasses(CategoryElem cat) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(cat, sb);
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String pkgBackOne = parentPackage(pkg);
+        String subnm = cat.enumFromDescription; //fixName(cat.description).toUpperCase();
+
+        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "Category", pkgBackOne + ".Base", "Category", "Category", subnm);
+        saveFile(dir, "Base.java", contents);
+
+        if (cat.subcategories.isEmpty())
+            return;
+        sb.setLength(0);
+
+        cat.subcategories.forEach((subcat) -> {
+            String nm = subcat.enumFromDescription;
+            if (!(nm.equals("DEPRECATED"))) {
+                sb.append("    ");
+                sb.append(nm);
+                sb.append(" (");
+                sb.append(subcat.value);
+                sb.append(", \"");
+                sb.append(subcat.description.replace('"', '\''));
+                sb.append("\"),\n");
+            }
+        });
+        sb.setLength(sb.length() - 2);
+
+        contents = String.format(entityEnumTemplate, pkg, "SubCategory", "SubCategory", sb.toString(), "SubCategory", "SubCategory", "SubCategory", "SubCategory");
+        saveFile(dir, "SubCategory.java", contents);
+    }
+
+    /*
+        private String makeUniqueEnum(String value, HashSet<String> set)
         {
-            s = fixName(s);
-            s = s.replaceAll("_", "");
-            s = s.toLowerCase();
+            String ret = value;
+            int i=1;
+            while(set.contains(ret)){
+                ret = value+ i++;
+            }
+            set.add(ret);
+            return ret;
+        }
+     */
+    private void writeBaseClasses(SubCategoryElem sub) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(sub, sb);
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String pkgBackOne = parentPackage(pkg);
+        String subnm = sub.enumFromDescription;
+
+        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "SubCategory", pkgBackOne + ".Base", "Subcategory", "SubCategory", subnm);
+        saveFile(dir, "Base.java", contents);
+
+        if (sub.specifics.isEmpty())
+            return;
+        sb.setLength(0);
+
+        sub.specifics.forEach((extra) -> {
+            String nm = extra.enumFromDescription;
+            if (!(nm.equals("DEPRECATED"))) {
+                sb.append("    ");
+                sb.append(nm);
+                sb.append(" (");
+                sb.append(extra.value);
+                sb.append(", \"");
+                sb.append(extra.description.replace('"', '\''));
+                sb.append("\"),\n");
+            }
+        });
+
+        sb.setLength(sb.length() - 2);
+
+        contents = String.format(entityEnumTemplate, pkg, "Specific", "Specific", sb.toString(), "Specific", "Specific", "Specific", "Specific");
+        saveFile(dir, "Specific.java", contents);
+    }
+
+    private void writeBaseClasses(SpecificElem spec) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(spec, sb);
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String pkgBackOne = parentPackage(pkg);
+        String specnm = fixName(spec.description).toUpperCase();
+
+        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "Specific", pkgBackOne + ".Base", "Specific", "Specific", specnm);
+        saveFile(dir, "Base.java", contents);
+
+        if (spec.extras.isEmpty())
+            return;
+        sb.setLength(0);
+
+        spec.extras.forEach((extra) -> {
+            String nm = fixName(extra.description).toUpperCase();
+            if (!(nm.equals("DEPRECATED"))) {
+                sb.append("    ");
+                sb.append(nm);
+                sb.append(" (");
+                sb.append(extra.value);
+                sb.append(", \"");
+                sb.append(extra.description.replace('"', '\''));
+                sb.append("\"),\n");
+            }
+        });
+        sb.setLength(sb.length() - 2);
+
+        contents = String.format(entityEnumTemplate, pkg, "Extra", "Extra", sb.toString(), "Extra", "Extra", "Extra", "Extra");
+        saveFile(dir, "Extra.java", contents);
+    }
+
+    private void writeFile(CategoryElem cat) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(cat.parent, sb);
+
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String classNm = fixName(cat.description);
+        String specEnum = classNm.toUpperCase();
+
+        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Category", "Category", specEnum);
+        saveFile(dir, classNm + ".java", contents);
+    }
+
+    private void writeFile(SubCategoryElem subc) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(subc.parent, sb);
+
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String classNm = fixName(subc.description);
+
+        //Hack...how to fix to avoid package name clashing with file name?
+        if (classNm.equalsIgnoreCase("Other"))
+            if (subc.parent.description.equalsIgnoreCase("Other"))
+                classNm = classNm + "1";
+
+        String specEnum = classNm.toUpperCase();
+
+        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Subcategory", "SubCategory", specEnum);
+        saveFile(dir, classNm + ".java", contents);
+    }
+
+    private void writeFile(SpecificElem spec) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(spec.parent, sb);
+
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        File f = new File(dir, fixName(spec.description) + ".java");
+        f.createNewFile();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String classNm = fixName(spec.description);
+        String specEnum = classNm.toUpperCase();
+
+        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Specific", "Specific", specEnum);
+        saveFile(dir, classNm + ".java", contents);
+
+    }
+
+    private void writeFile(ExtraElem extra) throws Exception
+    {
+        StringBuilder sb = new StringBuilder();
+        buildPackagePath(extra.parent, sb);
+
+        File dir = new File(outputDirectory, sb.toString());
+        dir.mkdirs();
+
+        String pkg = basePackageName + "." + pathToPackage(sb.toString());
+        String classNm = fixName(extra.description);
+        String specEnum = classNm.toUpperCase();
+
+        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Extra", "Extra", specEnum);
+        saveFile(dir, classNm + ".java", contents);
+    }
+
+    private void saveFile(File parentDir, String name, String contents)
+    {
+        // save file
+        File target = new File(parentDir, name);
+        try {
+            target.createNewFile();
+            try (FileWriter fw = new FileWriter(target)) {
+                fw.write(contents);
+                fw.flush();
+            }
+        }
+        catch (IOException ex) {
+            throw new RuntimeException("Error saving "+name+": "+ex.getLocalizedMessage(), ex);
+        }
+    }
+    Pattern regex = Pattern.compile("\\((.*?)\\)");
+
+    private String buildCountryPackagePart(String s)
+    {
+        Matcher m = regex.matcher(s);
+        String fnd = null;
+        while (m.find()) {
+            fnd = m.group(1);
+            if (fnd.length() == 3)
+                break;
+            fnd = null;
+        }
+        if (fnd != null)
+            return fnd.toLowerCase();
+
+        s = fixName(s);
+        s = s.toLowerCase();
+        if (s.length() > 3)
+            return s.substring(0, 3);
+        else
+            return s;
+    }
+
+    private String buidKindOrDomainPackagePart(String s)
+    {
+        s = fixName(s);
+        s = s.replaceAll("_", "");
+        s = s.toLowerCase();
+        return s;
+    }
+
+    //Country, kind, domain 
+    private void buildPackagePath(EntityElem ent, StringBuilder sb) throws Exception
+    {
+        String countryname = Main.this.getName(countryFromInt, countryName, Integer.parseInt(ent.country));
+        String countrydesc = Main.this.getDescription(countryFromInt, countryDescription, Integer.parseInt(ent.country));
+        countryname = buildCountryPackagePart(countrydesc);
+        sb.append(buildCountryPackagePart(countrydesc));
+        sb.append("/");
+
+        String kindname = getName(kindFromInt, kindName, Integer.parseInt(ent.kind));
+        kindname = buidKindOrDomainPackagePart(kindname);
+        sb.append(buidKindOrDomainPackagePart(kindname));
+        sb.append("/");
+
+        String domainname;
+        String kindnamelc = kindname.toLowerCase();
+
+        switch(kindnamelc) {
+            case "munition":
+                domainname = getName(munitionDomainFromInt, munitionDomainName, Integer.parseInt(ent.domain));
+                break;
+            case "supply":
+                domainname = getName(supplyDomainFromInt, supplyDomainName, Integer.parseInt(ent.domain));
+                break;
+            default:
+                domainname = getName(platformDomainFromInt, platformDomainName, Integer.parseInt(ent.domain));
+                break;
+        }
+
+        domainname = buidKindOrDomainPackagePart(domainname);
+        sb.append(buidKindOrDomainPackagePart(domainname));
+        sb.append("/");
+    }
+
+    private void buildPackagePath(CategoryElem elm, StringBuilder sb) throws Exception
+    {
+        try {
+            buildPackagePath(elm.parent, sb);
+        }
+        catch (NullPointerException ex) {
+            System.out.println("bp");
+        }
+        sb.append(elm.pkgFromDescription);
+        sb.append("/");
+    }
+
+    private String buildPackagePath(SubCategoryElem sub, StringBuilder sb) throws Exception
+    {
+        buildPackagePath(sub.parent, sb);
+        sb.append(sub.pkgFromDescription);
+        sb.append("/");
+        return sb.toString();
+    }
+
+    private String buildPackagePath(SpecificElem spec, StringBuilder sb) throws Exception
+    {
+        buildPackagePath(spec.parent, sb);
+        sb.append(spec.pkgFromDescription);
+        sb.append("/");
+        return sb.toString();
+    }
+
+    private String pathToPackage(String s)
+    {
+        s = s.replace("/", ".");
+        if (s.endsWith("."))
+            s = s.substring(0, s.length() - 1);
+        return s;
+    }
+
+    private String parentPackage(String s)
+    {
+        return s.substring(0, s.lastIndexOf('.'));
+    }
+
+    String maybeSpecialCase(String s, String dflt)
+    {
+        String lc = s.toLowerCase();
+        if (lc.equals("united states"))
+            return "USA";
+        if (lc.equals("not_used"))
+            return "";
+        return dflt;
+    }
+
+    String smallCountryName(String s, String integ)
+    {
+        if (integ.equals("0"))
+            return "";  // "other
+
+        if (s.length() <= 3)
+            return s;
+        try {
+            s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+            if (s.length() > 3) {
+                return maybeSpecialCase(s, integ);
+            }
             return s;
         }
-            
-        //Country, kind, domain 
-        private void buildPackagePath(EntityElem ent, StringBuilder sb) throws Exception
-        {
-           String countryname = Main.this.getName(countryFromInt, countryName, Integer.parseInt(ent.country));
-           String countrydesc = Main.this.getDescription(countryFromInt, countryDescription, Integer.parseInt(ent.country));
-           countryname = buildCountryPackagePart(countrydesc);
-           sb.append(buildCountryPackagePart(countrydesc));
-           sb.append("/");
-   
-           
-           String kindname = getName(kindFromInt, kindName, Integer.parseInt(ent.kind));
-           String kinddesc = getDescription(kindFromInt, kindDescription, Integer.parseInt(ent.kind));
-           kindname = buidKindOrDomainPackagePart(kindname);
-           sb.append(buidKindOrDomainPackagePart(kindname));
-           sb.append("/");
-           
-           String domainname;
-           String kindnamelc = kindname.toLowerCase();
-           
-           if(kindnamelc.equals("munition")) 
-               domainname = getName(munitionDomainFromInt, munitionDomainName, Integer.parseInt(ent.domain));
-           else if(kindnamelc.equals("supply"))
-               domainname = getName(supplyDomainFromInt, supplyDomainName, Integer.parseInt(ent.domain));
-            else
-               domainname = getName(platformDomainFromInt, platformDomainName, Integer.parseInt(ent.domain));
-           
-           //String domaindesc = getDescription(platformDomainFromInt, platformDomainDescription, Integer.parseInt(ent.domain));
-           domainname = buidKindOrDomainPackagePart(domainname);
-           sb.append(buidKindOrDomainPackagePart(domainname));
-           sb.append("/");
+        catch (Exception ex) {
+            return integ;
         }
-        
-        private void buildPackagePath(CategoryElem elm, StringBuilder sb) throws Exception
-        {
-            try {
-           buildPackagePath(elm.parent, sb);
-            }
-            catch(NullPointerException ex) {
-                System.out.println("bp");
-            }
-           sb.append(fixName(elm.description));
-           sb.append("/");
-        }
-        
-        private String buildPackagePath(SubCategoryElem sub, StringBuilder sb) throws Exception
-        {
-           buildPackagePath(sub.parent,sb);
-           sb.append(fixName(sub.description));
-           sb.append("/");
-           return sb.toString();
-          
-        }
-        
-        private String buildPackagePath(SpecificElem spec, StringBuilder sb) throws Exception
-        {
-           buildPackagePath(spec.parent, sb);
-           sb.append(fixName(spec.description));
-           sb.append("/");
-           return sb.toString();
+    }
 
-        }
-        // mostly identical to writeOutEnum  
-      /*  HashSet<String> dictNames = new HashSet<>();
-        private void writeOutDict(DictionaryElem el)
-        {
-            String clsName = Main.this.uid2ClassName.getProperty(el.uid);
-            if (clsName == null) {
-                System.err.println("Didn't find a class name for uid = "+el.uid);
-                return;
-            }
-            StringBuilder sb = new StringBuilder();
-            
-            // Header section
-            String additionalInterface = "";
-            String otherIf = interfaceInjection.getProperty(clsName);
-            if(otherIf != null)
-                additionalInterface = ", "+otherIf;
-            
-            sb.append(String.format(dictEnumTemplate1, specTitleDate, packageName, "UID "+el.uid, clsName, additionalInterface));
-            
-            dictNames.clear();
-            // enum section
-            el.elems.forEach((row) -> {
-                String name = row.value.replaceAll("[^a-zA-Z0-9]",""); // only chars and numbers
-                if(!dictNames.contains(name)) {
-                  sb.append(String.format(dictEnumTemplate2, name, row.description.replace('"','\'')));
-                  dictNames.add(name);
-                }
-                else
-                    System.out.println("Duplicate dictionary entry for "+name+" in "+clsName);
-            });
+    private void printUnsupportedMessage(String elname, String eldesc, CategoryElem cat)
+    {
+        StringBuilder bldr = new StringBuilder();
+        bldr.append(cat.description);
+        bldr.append("/");
+        bldr.append(cat.parent.kind);
+        bldr.append("/");
+        bldr.append(cat.parent.domain);
+        bldr.append("/");
+        bldr.append(cat.parent.country);
 
-            if (el.elems.size() > 0)
-                sb.setLength(sb.length() - 2);
-            sb.append(";\n");
-           
-            // footer section
-            sb.append(String.format(dictEnumTemplate3, clsName));
+        System.out.println("XML element " + elname + " {" + eldesc + "in " + bldr.toString() + " not supported");
+    }
 
-            // save file
-            File target = new File(outputDirectory, clsName + ".java");
-            FileWriter fw = null;
-            try {
-                target.createNewFile();
-                fw = new FileWriter(target);
-                fw.write(sb.toString());
-                fw.flush();
-                fw.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        */
-        /*
-        private void writeOutBitfield(BitfieldElem el)
-        {
-           String clsName = Main.this.uid2ClassName.getProperty(el.uid);
-            if (clsName == null)
-                return;
-            StringBuilder sb = new StringBuilder(); 
-            
-            sb.append(String.format(bitsetTemplate1, specTitleDate, packageName, "UID "+el.uid, el.size, clsName));
-            enumNames.clear();
-            el.elems.forEach((row) -> {
-                String xrefName = null;
-                if(row.xrefclassuid != null)
-                    xrefName = Main.this.uid2ClassName.getProperty(row.xrefclassuid);
-                if(xrefName != null)
-                    sb.append(String.format(bitsetTemplate16, createEnumName(row.name),row.bitposition,row.length,xrefName));
-                else
-                    sb.append(String.format(bitsetTemplate15, createEnumName(row.name),row.bitposition,row.length));
-            });
-            if (el.elems.size() > 0)
-                sb.setLength(sb.length() - 2);
-            sb.append(";\n");
+    private void printUnsupportedMessage(String elname, String eldesc, SubCategoryElem sub)
+    {
+        StringBuilder bldr = new StringBuilder();
+        bldr.append(sub.description);
+        bldr.append("/");
+        bldr.append(sub.parent.description);
+        bldr.append("/");
+        bldr.append(sub.parent.parent.kind);
+        bldr.append("/");
+        bldr.append(sub.parent.parent.domain);
+        bldr.append("/");
+        bldr.append(sub.parent.parent.country);
 
-            sb.append(String.format(bitsetTemplate2,clsName,clsName,clsName));
-            
-            // save file
-            File target = new File(outputDirectory, clsName + ".java");
-            FileWriter fw = null;
-            try {
-                target.createNewFile();
-                fw = new FileWriter(target);
-                fw.write(sb.toString());
-                fw.flush();
-                fw.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        */
-        /*
-        HashSet<String> enumNames = new HashSet<>();
-        
-        private void writeOutEnum(EnumElem el)
-        {
-            String clsName = Main.this.uid2ClassName.getProperty(el.uid);
-            if (clsName == null)
-                return;
-            StringBuilder sb = new StringBuilder();
-            
-            // Header section
-            String additionalInterface = "";
-            String otherIf = interfaceInjection.getProperty(clsName);
-            if(otherIf != null)
-                additionalInterface = ", "+otherIf;
-            
-            sb.append(String.format(enumTemplate1, specTitleDate, packageName, "UID "+el.uid, el.size, clsName, additionalInterface));
-            
-            enumNames.clear();
-            // enum section
-            if(el.elems.isEmpty())
-                sb.append(String.format(enumTemplate2,"NOT_SPECIFIED","0","undefined by SISO spec"));
-            else
-                el.elems.forEach((row) -> {
-                    sb.append(String.format(enumTemplate2, createEnumName(row.description),row.value,row.description.replace('"','\'')));
-                });
+        System.out.println("XML element " + elname + " {" + eldesc + "in " + bldr.toString() + " not supported");
+    }
 
-            if (el.elems.size() > 0)
-                sb.setLength(sb.length() - 2);
-            sb.append(";\n");
-           
-            sb.append(String.format(enumTemplate25, clsName, clsName, clsName, clsName));
-            
-            // footer section
-            if(el.size == null)
-                el.size = "8"; 
-            if(el.size.equals("16"))
-              sb.append(String.format(enumTemplate3_16, clsName));
-            else if(el.size.equals("32"))             
-              sb.append(String.format(enumTemplate3_32, clsName));
-            else //if(el == null || el.size == null || el.size.equals("8"))
-              sb.append(String.format(enumTemplate3_8, clsName));
-           /*
-            else {
-                System.out.println("no class created for "+clsName+" with marshal size = "+el.size);
-                return;
-            }
+    private String fixName(String s)
+    {
+        String r = s.trim();
+        // Convert any of these chars to underbar (u2013 is a hyphen observed in source XML):
+        r = r.replaceAll(" ", "");
 
-            // save file
-            File target = new File(outputDirectory, clsName + ".java");
-            FileWriter fw = null;
-            try {
-                target.createNewFile();
-                fw = new FileWriter(target);
-                fw.write(sb.toString());
-                fw.flush();
-                fw.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-*/
-        private void writeOutEntity(EntityElem elem)
-        {
-          /* try {
-                if (entityTypeFactory == null) {
-                    entityTypeFactory = new File(outputDirectory, "EntityTypeFactory.java");
+        r = r.replaceAll("[\\h-/,\";:\\u2013]", "_");
 
-                    entityTypeFactory.createNewFile();
-                    entityFileWriter = new FileWriter(entityTypeFactory);
-                    entityFileWriter.write(String.format(entityTemplate1, "edu.nps.moves.dis.enumerations"));
-                }
-                
-                EntityKind kind = EntityKind.getEnumerationForValue(Integer.parseInt(elem.kind));
+        // Remove any of these chars (u2019 is an apostrophe observed in source XML):
+        r = r.replaceAll("[\\[\\]()}{}'.#&\\u2019]", "");
 
-                for (CategoryElem category : elem.categories) {
-                    for (SubCategoryElem subcategory : category.subcategories) {
-                        for (SpecificElem specific : subcategory.specifics) {
-                            String methodComment = makeComment(kind, elem, category, subcategory, specific);
+        // Special case the plus character:
+        r = r.replace("+", "PLUS");
 
-                            String methodName1 = firstCharUpper(EntityKind.getEnumerationForValue(Integer.parseInt(elem.kind)).name());
-                            String methodName2=null;
-                            String countryNameSmall = null;
-                            String constructorArg1=null, constructorArg2=null;
-                            String constructorArg3 = null;
-                            
-                            try {
-                                if (kind == EntityKind.MUNITION) {
-                                    methodName2 = firstCharUpper(MunitionDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name());
-                                }
-                                else if (kind == EntityKind.SUPPLY) {
-                                    methodName2 = maybeSpecialCase(firstCharUpper(SupplyDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name()), elem.domain);
-                                }
-                                else {//if(kind == EntityKind.PLATFORM)
-                                    methodName2 = firstCharUpper(PlatformDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name());
-                                }
+        // Collapse all contiguous underbars:
+        r = r.replaceAll("_{2,}", "_");
 
-                                countryNameSmall = smallCountryName(Country.getEnumerationForValue(Integer.parseInt(elem.country)).getDescription(), elem.country);
+        r = r.replace("<=", "LTE");
+        r = r.replace("<", "LT");
+        r = r.replace(">=", "GTE");
+        r = r.replace(">", "GT");
+        r = r.replace("=", "EQ");
+        r = r.replace("%", "pct");
 
-                                if (kind == EntityKind.MUNITION) {
-                                    constructorArg1 = "MunitionDomain";
-                                    constructorArg2 = MunitionDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).toString();
-                                }
-                                else if (kind == EntityKind.SUPPLY) {
-                                    constructorArg1 = "SupplyDomain";
-                                    constructorArg2 = SupplyDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).toString();
-                                }
-                                else { //if(kind == EntityKind.PLATFORM
-                                    constructorArg1 = "PlatformDomain";
-                                    constructorArg2 = PlatformDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).toString();
-                                }
+        // If there's nothing there, put in something:
+        if (r.isEmpty() || r.equals("_"))
+            r = "undef";
 
-                                constructorArg3 = Country.getEnumerationForValue(Integer.parseInt(elem.country)).name();
-                            }
-                            catch (EnumNotFoundException ex) {
-                                throw new RuntimeException("Missing enum for "+methodComment);
-                            }
-                            
-                            entityFileWriter.write(String.format(entityTemplate2,
-                                methodComment,
-                                methodName1, methodName2, countryNameSmall, category.value, subcategory.value, specific.value, 
-                                kind.name(), constructorArg1, constructorArg2, constructorArg3,
-                                
-                                category.value, category.description,
-                                subcategory.value, subcategory.description,
-                                specific.value, specific.description)); 
-                        }
-                    }
-                }
-            }
-            catch (EnumNotFoundException | IOException ex) {
-                ex.printStackTrace();
-            }
-*/
-        }
-      
-        private String fixName(String s)
-        {
-            String r = s.trim();
-            // Convert any of these chars to underbar (u2013 is a hyphen observed in source XML):
-            r = r.replaceAll(" ", "");
-            
-            r = r.replaceAll("[\\h-/,\";:\\u2013]", "_");
-
-            // Remove any of these chars (u2019 is an apostrophe observed in source XML):
-            r = r.replaceAll("[()}{}'.#&\\u2019]","");
-
-            // Special case the plus character:
-            r = r.replace("+", "PLUS");
-            
-            // Collapse all contiguous underbars:
-            r = r.replaceAll("_{2,}", "_");
-            
-            // If there's nothing there, put in something:
-            if(r.isEmpty() || r.equals("_"))
-              r = "undef";
-            
-            // Java identifier can't start with digit
-            if(Character.isDigit(r.charAt(0)))
-                r =  "_"+r;
-            return r;
-        }
-
-        /*
-        private String firstCharUpper(String s)
-        {
-            String ret = s.toLowerCase();
-            char[] ca = ret.toCharArray();
-            ca[0] = Character.toUpperCase(ca[0]);
-            return new String(ca);
-        }
-          */
-        private String indent = "    ";
-  /*
-        private String makeComment(EntityKind kind, EntityElem elem, CategoryElem category, SubCategoryElem subcategory, SpecificElem specific)
-        {
-            StringBuilder sb = new StringBuilder();//indent);
-
-            sb.append("UID ");
-            sb.append(elem.uid);
-            sb.append(", ");
-            try {
-                sb.append(EntityKind.getEnumerationForValue(Integer.parseInt(elem.kind)).name());
-            }
-            catch(EnumNotFoundException ex) {
-                sb.append("Enum not found");
-            }
-            sb.append(", ");
-            try {
-                if (kind == EntityKind.MUNITION)
-                    sb.append(MunitionDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name());
-                else if (kind == EntityKind.SUPPLY)
-                    sb.append(SupplyDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name());
-                else //if(kind == EntityKind.PLATFORM)
-                    sb.append(PlatformDomain.getEnumerationForValue(Integer.parseInt(elem.domain)).name());
-                
-                sb.append(", ");
-                sb.append(Country.getEnumerationForValue(Integer.parseInt(elem.country)).getDescription());
-            }
-            catch (EnumNotFoundException ex) {
-                throw new RuntimeException("missing enum for uid = " + elem.uid);
-            }
-            sb.append(", ");
-            sb.append(category.description);
-            sb.append(", ");
-            sb.append(subcategory.description);
-            sb.append(", ");
-            sb.append(specific.description);
-
-            String s = sb.toString();
-            if(s.length()>120) {
-              String s1 = s.substring(0,120);
-              String s2 = s.substring(120);
-              s = s1+"\n "+indent+s2;
-            }
-            return s;
-
-        }
-*/
-        String maybeSpecialCase(String s, String dflt)
-        {
-            String lc = s.toLowerCase();
-            if (lc.equals("united states"))
-                return "USA";
-            if (lc.equals("not_used"))
-                return "";
-            return dflt;
-        }
-
-        String smallCountryName(String s, String integ)
-        {
-            if (integ.equals("0"))
-                return "";  // "other
-
-            if (s.length() <= 3)
-                return s;
-            try {
-                s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
-                if (s.length() > 3) {
-                    return maybeSpecialCase(s, integ);
-                }
-                return s;
-            }
-            catch (Exception ex) {
-                return integ;
-            }
-        }
+        // Java identifier can't start with digit
+        if (Character.isDigit(r.charAt(0)))
+            r = "_" + r;
+        return r;
     }
 
     public static void main(String[] args)
@@ -984,7 +921,7 @@ public class Main
             new Main(args[0], args[1], args[2]).run();
         }
         catch (SAXException | IOException | ParserConfigurationException ex) {
-            ex.printStackTrace();
+            System.err.println(ex.getClass().getSimpleName()+": "+ex.getLocalizedMessage());
         }
     }
 }
