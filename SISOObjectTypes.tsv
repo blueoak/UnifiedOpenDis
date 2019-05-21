@@ -1,0 +1,160 @@
+Package: edu.nps.moves.dis.objecttypes				
+Name	Domain	Kind	Category	Subcategory
+ ObjectTypes_PointObject.Tacticalsmoke.Other	 OTHER	 TACTICAL_SMOKE	 Other	 
+ ObjectTypes_PointObject.Tacticalsmoke.GroundBurst.Other	 OTHER	 TACTICAL_SMOKE	 Ground Burst	 Other
+ ObjectTypes_PointObject.Tacticalsmoke.GroundBurst.Artillery	 OTHER	 TACTICAL_SMOKE	 Ground Burst	 Artillery
+ ObjectTypes_PointObject.Tacticalsmoke.AirBurst.Other	 OTHER	 TACTICAL_SMOKE	 Air Burst	 Other
+ ObjectTypes_PointObject.Tacticalsmoke.AirBurst.Grenade	 OTHER	 TACTICAL_SMOKE	 Air Burst	 Grenade
+ ObjectTypes_PointObject.Tacticalsmoke.TacticalSmoke_Canister.M83_White	 OTHER	 TACTICAL_SMOKE	 Tactical Smoke, Canister	 M83, White
+ ObjectTypes_PointObject.Tacticalsmoke.TacticalSmoke_Canister.M18_Green	 OTHER	 TACTICAL_SMOKE	 Tactical Smoke, Canister	 M18, Green
+ ObjectTypes_PointObject.Tacticalsmoke.TacticalSmoke_Canister.M18_Violet	 OTHER	 TACTICAL_SMOKE	 Tactical Smoke, Canister	 M18, Violet
+ ObjectTypes_PointObject.Tacticalsmoke.TacticalSmoke_Canister.M18_Yellow	 OTHER	 TACTICAL_SMOKE	 Tactical Smoke, Canister	 M18, Yellow
+ ObjectTypes_PointObject.Tacticalsmoke.TacticalSmoke_Canister.M18_Red	 OTHER	 TACTICAL_SMOKE	 Tactical Smoke, Canister	 M18, Red
+ ObjectTypes_PointObject.Obstacle.Other	 LAND	 OBSTACLE	 Other	 
+ ObjectTypes_PointObject.Obstacle.Abatis.Other	 LAND	 OBSTACLE	 Abatis	 Other
+ ObjectTypes_PointObject.Obstacle.Abatis._8Tree	 LAND	 OBSTACLE	 Abatis	 8 Tree
+ ObjectTypes_PointObject.Obstacle.Abatis._14Tree	 LAND	 OBSTACLE	 Abatis	 14 Tree
+ ObjectTypes_PointObject.Obstacle.LogCrib.Other	 LAND	 OBSTACLE	 Log Crib	 Other
+ ObjectTypes_PointObject.Obstacle.LogCrib.Rectangular	 LAND	 OBSTACLE	 Log Crib	 Rectangular
+ ObjectTypes_PointObject.Obstacle.LogCrib.Triangular	 LAND	 OBSTACLE	 Log Crib	 Triangular
+ ObjectTypes_PointObject.Obstacle.Crater.Other	 LAND	 OBSTACLE	 Crater	 Other
+ ObjectTypes_PointObject.Obstacle.Crater.Small	 LAND	 OBSTACLE	 Crater	 Small
+ ObjectTypes_PointObject.Obstacle.Crater.Medium	 LAND	 OBSTACLE	 Crater	 Medium
+ ObjectTypes_PointObject.Obstacle.Crater.Large	 LAND	 OBSTACLE	 Crater	 Large
+ ObjectTypes_PointObject.Obstacle.Barrier.DragonsTeeth	 LAND	 OBSTACLE	 Barrier	 Dragon’s Teeth
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_HESCOBasket_Small	 LAND	 OBSTACLE	 Barrier	 Barrier, HESCO Basket, Small
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_HESCOBasket_Medium	 LAND	 OBSTACLE	 Barrier	 Barrier, HESCO Basket, Medium
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_HESCOBasket_Large	 LAND	 OBSTACLE	 Barrier	 Barrier, HESCO Basket, Large
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_HESCOBasket_Double_Stacked	 LAND	 OBSTACLE	 Barrier	 Barrier, HESCO Basket, Double-Stacked
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_Construction	 LAND	 OBSTACLE	 Barrier	 Barrier, Construction
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_Jersey_Plastic	 LAND	 OBSTACLE	 Barrier	 Barrier, Jersey, Plastic
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_Fence_Chain_6_foot	 LAND	 OBSTACLE	 Barrier	 Barrier, Fence, Chain, 6-foot
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_Fence_Wood_6_foot	 LAND	 OBSTACLE	 Barrier	 Barrier, Fence, Wood, 6-foot
+ ObjectTypes_PointObject.Obstacle.Barrier.Barrier_Texas	 LAND	 OBSTACLE	 Barrier	 Barrier, Texas
+ ObjectTypes_PointObject.Obstacle.RockDrop.RockDrop_Covered	 LAND	 OBSTACLE	 Rock Drop	 Rock Drop, Covered
+ ObjectTypes_PointObject.Obstacle.RockDrop.RockDrop_Uncovered	 LAND	 OBSTACLE	 Rock Drop	 Rock Drop, Uncovered
+ ObjectTypes_PointObject.Obstacle.PotHole	 LAND	 OBSTACLE	 Pot Hole	 
+ ObjectTypes_PointObject.Preparedposition.Other	 LAND	 PREPARED_POSITION	 Other	 
+ ObjectTypes_PointObject.Preparedposition.VehicleDefilade.Other	 LAND	 PREPARED_POSITION	 Vehicle Defilade	 Other
+ ObjectTypes_PointObject.Preparedposition.VehicleDefilade.ArmoredVehicle	 LAND	 PREPARED_POSITION	 Vehicle Defilade	 Armored Vehicle
+ ObjectTypes_PointObject.Preparedposition.VehicleDefilade.FightingVehicle	 LAND	 PREPARED_POSITION	 Vehicle Defilade	 Fighting Vehicle
+ ObjectTypes_PointObject.Preparedposition.VehicleDefilade.MortarCarrier	 LAND	 PREPARED_POSITION	 Vehicle Defilade	 Mortar Carrier
+ ObjectTypes_PointObject.Preparedposition.VehicleDefilade.Tank	 LAND	 PREPARED_POSITION	 Vehicle Defilade	 Tank
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.Other	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Other
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.CoveredMachineGunBunker	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Covered Machine Gun Bunker
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.OverheadCoveredInfantryPosition	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Overhead Covered Infantry Position
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.Non_CoveredInfantryPosition	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Non-Covered Infantry Position
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.Non_CoveredMachineGunBunker	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Non-Covered Machine Gun Bunker
+ ObjectTypes_PointObject.Preparedposition.InfantryFightingPosition.HastyFightingPosition	 LAND	 PREPARED_POSITION	 Infantry Fighting Position	 Hasty Fighting Position
+ ObjectTypes_PointObject.Culturalfeature.Other	 LAND	 CULTURAL_FEATURE	 Other	 
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.Other	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Other
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.Church	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Church
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.ApartmentBuilding	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Apartment Building
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.GovernmentBuilding	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Government Building
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.IndustrialBuilding	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Industrial Building
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.Hanger	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Hanger
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.MicrowaveTower	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Microwave Tower
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.PowerPylon	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Power Pylon
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.Radio_TVTower	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Radio / TV Tower
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.School	 LAND	 CULTURAL_FEATURE	 Building / Structure	 School
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.TransformerYard	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Transformer Yard
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.RadioTower_100ft	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Radio Tower, 100ft
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.RadioTower_500ft	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Radio Tower, 500ft
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.RadioTower_1000ft	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Radio Tower, 1000ft
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.PortaPotty	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Porta Potty
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.FOB_TrailerOffice	 LAND	 CULTURAL_FEATURE	 Building / Structure	 FOB, Trailer Office
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.FOB_GuardTower	 LAND	 CULTURAL_FEATURE	 Building / Structure	 FOB, Guard Tower
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.GuardHouse	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Guard House
+ ObjectTypes_PointObject.Culturalfeature.Building_Structure.Windmill	 LAND	 CULTURAL_FEATURE	 Building / Structure	 Windmill
+ ObjectTypes_PointObject.Culturalfeature.BuildingRubble.Other	 LAND	 CULTURAL_FEATURE	 Building Rubble	 Other
+ ObjectTypes_PointObject.Culturalfeature.DisturbedEarth	 LAND	 CULTURAL_FEATURE	 Disturbed Earth	 
+ ObjectTypes_PointObject.Culturalfeature.DisturbedRoad.DisturbedRoad_Gravel	 LAND	 CULTURAL_FEATURE	 Disturbed Road	 Disturbed Road, Gravel
+ ObjectTypes_PointObject.Culturalfeature.DisturbedRoad.DisturbedRoad_Asphalt	 LAND	 CULTURAL_FEATURE	 Disturbed Road	 Disturbed Road, Asphalt
+ ObjectTypes_PointObject.Culturalfeature.DisturbedRoad.DisturbedRoad_Concrete	 LAND	 CULTURAL_FEATURE	 Disturbed Road	 Disturbed Road, Concrete
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Small	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Small
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Medium	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Medium
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Large	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Large
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_ModularGeneralPurposeTentSystemMGPTS	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Modular General Purpose Tent System (MGPTS)
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Arctic	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Arctic
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_TEMPER	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, TEMPER
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_ExpandableFrame	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Expandable Frame
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Fritsche	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Fritsche
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Bedouin	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Bedouin
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_ChemicallyandBiologicalProtectedShelterCBPS	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Chemically and Biological Protected Shelter (CBPS)
+ ObjectTypes_PointObject.Culturalfeature.Tent.Tent_Kuchi	 LAND	 CULTURAL_FEATURE	 Tent	 Tent, Kuchi
+ ObjectTypes_PointObject.Culturalfeature.MaintenanceStructure.LightweightMaintenanceEnclosureLME_Bradley	 LAND	 CULTURAL_FEATURE	 Maintenance Structure	 Lightweight Maintenance Enclosure (LME), Bradley
+ ObjectTypes_PointObject.Culturalfeature.MaintenanceStructure.LightweightMaintenanceEnclosureLME_M1	 LAND	 CULTURAL_FEATURE	 Maintenance Structure	 Lightweight Maintenance Enclosure (LME), M1
+ ObjectTypes_PointObject.Culturalfeature.MaintenanceStructure.LargeAreaMaintenanceShelterLAMSVehicleMaintenanceVM	 LAND	 CULTURAL_FEATURE	 Maintenance Structure	 Large Area Maintenance Shelter (LAMS) Vehicle Maintenance (VM)
+ ObjectTypes_PointObject.Culturalfeature.MaintenanceStructure.LargeAreaMaintenanceShelterLAMSAviationMaintenanceAM	 LAND	 CULTURAL_FEATURE	 Maintenance Structure	 Large Area Maintenance Shelter (LAMS) Aviation Maintenance (AM)
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_House	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, House
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_Hospital	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Hospital
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_GasStation	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Gas Station
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_Store	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Store
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_OfficeBuilding	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Office Building
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_Warehouse	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Warehouse
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_ControlTower	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Control Tower
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_WaterTower	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Water Tower
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_PoliceStation	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Police Station
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_FireStation	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Fire Station
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_PowerStation	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Power Station
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_Apartment	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Apartment
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_School	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, School
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_Church	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Church
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_FarmHouse	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Farm House
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_MudbrickHouse	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Mudbrick House
+ ObjectTypes_PointObject.Culturalfeature.MOUTBuilding.MOUTBuilding_MudbrickStore	 LAND	 CULTURAL_FEATURE	 MOUT Building	 MOUT Building, Mudbrick Store
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_Store_Single	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, Store, Single
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_House_Single	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, House, Single
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_House_Single_Railing	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, House, Single, Railing
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_House_Double	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, House, Double
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_Mosque_Single	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, Mosque, Single
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_Bridge_Single	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, Bridge, Single
+ ObjectTypes_PointObject.Culturalfeature.Container_BasedBuilding.Container_BasedBuilding_FOB	 LAND	 CULTURAL_FEATURE	 Container-Based Building	 Container-Based Building, FOB
+ ObjectTypes_PointObject.Culturalfeature.Tree_Deciduous.Tree_Deciduous_Small	 LAND	 CULTURAL_FEATURE	 Tree, Deciduous	 Tree, Deciduous, Small
+ ObjectTypes_PointObject.Culturalfeature.Tree_Deciduous.Tree_Deciduous_Medium	 LAND	 CULTURAL_FEATURE	 Tree, Deciduous	 Tree, Deciduous, Medium
+ ObjectTypes_PointObject.Culturalfeature.Tree_Deciduous.Tree_Deciduous_Large	 LAND	 CULTURAL_FEATURE	 Tree, Deciduous	 Tree, Deciduous, Large
+ ObjectTypes_PointObject.Culturalfeature.Tree_Evergreen.Tree_Evergreen_Small	 LAND	 CULTURAL_FEATURE	 Tree, Evergreen	 Tree, Evergreen, Small
+ ObjectTypes_PointObject.Culturalfeature.Tree_Evergreen.Tree_Evergreen_Medium	 LAND	 CULTURAL_FEATURE	 Tree, Evergreen	 Tree, Evergreen, Medium
+ ObjectTypes_PointObject.Culturalfeature.Tree_Evergreen.Tree_Evergreen_Large	 LAND	 CULTURAL_FEATURE	 Tree, Evergreen	 Tree, Evergreen, Large
+ ObjectTypes_PointObject.Culturalfeature.Pump.Pump_Gas	 LAND	 CULTURAL_FEATURE	 Pump	 Pump, Gas
+ ObjectTypes_PointObject.Culturalfeature.IndustrialProcessingPlant.OilRefinery	 LAND	 CULTURAL_FEATURE	 Industrial Processing Plant	 Oil Refinery 
+ ObjectTypes_PointObject.Culturalfeature.UtilityPole	 LAND	 CULTURAL_FEATURE	 Utility Pole	 
+ ObjectTypes_PointObject.Passageway.Other	 LAND	 PASSAGEWAY	 Other	 
+ ObjectTypes_PointObject.Passageway.StationaryBridge.Other	 LAND	 PASSAGEWAY	 Stationary Bridge	 Other
+ ObjectTypes_PointObject.Passageway.StationaryBridge._2_Lane	 LAND	 PASSAGEWAY	 Stationary Bridge	 2-Lane
+ ObjectTypes_PointObject.Passageway.StationaryBridge._4_Lane	 LAND	 PASSAGEWAY	 Stationary Bridge	 4-Lane
+ ObjectTypes_PointObject.Passageway.AVLB.Other	 LAND	 PASSAGEWAY	 AVLB	 Other
+ ObjectTypes_PointObject.Passageway.AVLB.M60A1	 LAND	 PASSAGEWAY	 AVLB	 M60A1
+ ObjectTypes_PointObject.Passageway.AVLB.MTU20	 LAND	 PASSAGEWAY	 AVLB	 MTU20
+ ObjectTypes_PointObject.Passageway.AVLB.JointAssaultBridgeJAB	 LAND	 PASSAGEWAY	 AVLB	 Joint Assault Bridge (JAB)
+ ObjectTypes_PointObject.Passageway.RibbonBridge.Other	 LAND	 PASSAGEWAY	 Ribbon Bridge	 Other
+ ObjectTypes_PointObject.Passageway.RibbonBridge._2_Lane	 LAND	 PASSAGEWAY	 Ribbon Bridge	 2-Lane
+ ObjectTypes_PointObject.Passageway.RibbonBridge._4_Lane	 LAND	 PASSAGEWAY	 Ribbon Bridge	 4-Lane
+ ObjectTypes_PointObject.Passageway.Pier	 LAND	 PASSAGEWAY	 Pier	 
+ ObjectTypes_PointObject.Obstaclemarker.NBCHazardMarker	 LAND	 OBSTACLE_MARKER	 NBC Hazard Marker	 
+ ObjectTypes_PointObject.EnvironmentalObject.Flood.Flood_Small	 LAND	 ENVIRONMENTAL_OBJECT	 Flood	 Flood, Small
+ ObjectTypes_PointObject.EnvironmentalObject.Flood.Flood_Medium	 LAND	 ENVIRONMENTAL_OBJECT	 Flood	 Flood, Medium
+ ObjectTypes_PointObject.EnvironmentalObject.Flood.Flood_Large	 LAND	 ENVIRONMENTAL_OBJECT	 Flood	 Flood, Large
+ ObjectTypes_LinearObject.Tacticalsmoke.Other	 OTHER	 TACTICAL_SMOKE	 Other	 
+ ObjectTypes_LinearObject.Tacticalsmoke.ExhaustSmoke.Other	 OTHER	 TACTICAL_SMOKE	 Exhaust Smoke	 Other
+ ObjectTypes_LinearObject.Obstacle.Other	 LAND	 OBSTACLE	 Other	 
+ ObjectTypes_LinearObject.Obstacle.TankDitch.Other	 LAND	 OBSTACLE	 Tank Ditch	 Other
+ ObjectTypes_LinearObject.Obstacle.ConcertinaWire.Other	 LAND	 OBSTACLE	 Concertina Wire	 Other
+ ObjectTypes_LinearObject.Obstacle.ConcertinaWire._2_Roll	 LAND	 OBSTACLE	 Concertina Wire	 2-Roll
+ ObjectTypes_LinearObject.Obstacle.ConcertinaWire._3_Roll	 LAND	 OBSTACLE	 Concertina Wire	 3-Roll
+ ObjectTypes_LinearObject.Obstacle.ConcreteBarrier	 LAND	 OBSTACLE	 Concrete Barrier	 
+ ObjectTypes_LinearObject.Obstacle.SpeedBump	 LAND	 OBSTACLE	 Speed Bump	 
+ ObjectTypes_LinearObject.Obstacle.Rut	 LAND	 OBSTACLE	 Rut	 
+ ObjectTypes_LinearObject.Obstacle.ChainLinkFence	 LAND	 OBSTACLE	 Chain Link Fence	 
+ ObjectTypes_LinearObject.Culturalfeature.Wire.Wire_Crush	 LAND	 CULTURAL_FEATURE	 Wire	 Wire, Crush
+ ObjectTypes_LinearObject.Culturalfeature.Tracks_Tire	 LAND	 CULTURAL_FEATURE	 Tracks, Tire	 
+ ObjectTypes_LinearObject.Obstaclemarker.Other	 LAND	 OBSTACLE_MARKER	 Other	 
+ ObjectTypes_LinearObject.Obstaclemarker.MinefieldLaneMarker.Other	 LAND	 OBSTACLE_MARKER	 Minefield Lane Marker	 Other
+ ObjectTypes_LinearObject.Obstaclebreach.Other	 LAND	 OBSTACLE_BREACH	 Other	 
+ ObjectTypes_LinearObject.Obstaclebreach.Breach.Other	 LAND	 OBSTACLE_BREACH	 Breach	 Other
+ ObjectTypes_ArealObject.Obstacle.Other	 OTHER	 OBSTACLE	 Other	 
+ ObjectTypes_ArealObject.Obstacle.Minefield.Other	 OTHER	 OBSTACLE	 Minefield	 Other
+ ObjectTypes_ArealObject.Obstacle.Minefield.Hasty	 OTHER	 OBSTACLE	 Minefield	 Hasty
+ ObjectTypes_ArealObject.Obstacle.Minefield.Prepared	 OTHER	 OBSTACLE	 Minefield	 Prepared
+ ObjectTypes_ArealObject.Obstacle.Minefield.Scattered	 OTHER	 OBSTACLE	 Minefield	 Scattered
+ ObjectTypes_ArealObject.Obstacle.Minefield.Solitary	 OTHER	 OBSTACLE	 Minefield	 Solitary

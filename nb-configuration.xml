@@ -8,10 +8,16 @@ Without this configuration present, some functionality in the IDE may be limited
 -->
     <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
         <configurations>
+            <configuration id="JarCountryEntities" profiles=""/>
+            <configuration id="JarRusEntities" profiles=""/>
+            <configuration id="JarUsaEntities" profiles=""/>
             <configuration id="MakeEntitiesDis7" profiles=""/>
             <configuration id="MakeEnumsDis7" profiles=""/>
-            <configuration id="MakePdusDis7" profiles=""/>
             <configuration id="MakeJammersDis7" profiles=""/>
+            <configuration id="MakeObjectTypesDis7" profiles=""/>
+            <configuration id="MakePdusDis7" profiles=""/>
+            <configuration id="TestObjectTypeCreation" profiles=""/>
+            <configuration id="JarCountryEntitiesSrc" profiles=""/>
         </configurations>
     </config-data>
 </project-shared-configuration>
