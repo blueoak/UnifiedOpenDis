@@ -16,4 +16,6 @@ package edu.nps.moves.dis;
  */
 public interface Category extends Marshaller
 {
+    int getValue();
+    String getDescription();
 }
