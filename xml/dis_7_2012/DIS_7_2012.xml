@@ -2008,7 +2008,7 @@
            comment="The unique designation of an environmental object. Section 6.2.64">
 
         <attribute name="domain" comment="Domain of entity (air, surface, subsurface, space, etc)">
-            <sisoenum type="IsPartOfStationName" comment="uid 8"/>
+            <sisoenum type="PlatformDomain" comment="uid 8"/>
         </attribute>
 
         <attribute name="objectKind" comment="country to which the design of the entity is attributed" >
@@ -2016,11 +2016,11 @@
         </attribute>
 
         <attribute name="category" comment="category of entity">
-            <primitive type="uint8"/>
+            <sisoenum type="Category" comment="not single enum"/>
         </attribute>
-
+    
         <attribute name="subcategory" comment="subcategory of entity">
-            <primitive type="uint8"/>
+            <sisoenum type="SubCategory" comment="not single enum"/>
         </attribute>
 
     </class>
