@@ -98,6 +98,19 @@
                         </configuration>
                     </execution>                                                                           
                     <execution>
+                        <id>objecttypegenerator</id>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath />
+                                <argument>edu.nps.moves.opendis.reference.entitygenerator.ObjectTypeMain</argument>
+                                <argument>xml/SISO/SISO_REF_010_v25/SISO_REF_010.xml</argument>
+                                <argument>generated/dis7/sisoEntities/java/edu/nps/moves/dis/objecttypes</argument>
+                                <argument>edu.nps.moves.dis.objecttypes</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>                                     <execution>
                         <id>pdugenerator</id>
                         <configuration>
                             <executable>java</executable>
@@ -126,6 +139,17 @@
                             </arguments>
                         </configuration>
                     </execution>                       
+                    <execution>
+                        <id>testobjecttypecreation</id>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath />
+                                <argument>edu.nps.moves.opendis.reference.tests.CreateAllObjectTypes</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>           
                 </executions>
             </plugin>
             <plugin>
@@ -148,12 +172,14 @@
                                 <include>pdusAndEntities/java/edu/nps/moves/dis/**</include>
                                 <include>sisoEntities/java/edu/nps/moves/dis/entities/**</include>
                                 <include>sisoEntities/java/edu/nps/moves/dis/jammers/**</include>
+                                <include>sisoEntities/java/edu/nps/moves/dis/objecttypes/**</include>
                             </includes>
                             <excludes>
                                 <exclude>enums/java/edu/nps/moves/dis/enumerations/.keep</exclude>
                                 <exclude>pdusAndEntities/java/edu/nps/moves/dis/.keep</exclude>
                                 <exclude>sisoEntities/java/edu/nps/moves/dis/entities/.keep</exclude> 
-                                <exclude>sisoEntities/java/edu/nps/moves/dis/jammers/.keep</exclude>                             
+                                <exclude>sisoEntities/java/edu/nps/moves/dis/jammers/.keep</exclude> 
+                                <exclude>sisoEntities/java/edu/nps/moves/dis/objecttypes/.keep</exclude>                           
                             </excludes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
@@ -162,4 +188,30 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <version>2.44.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
 </project>
