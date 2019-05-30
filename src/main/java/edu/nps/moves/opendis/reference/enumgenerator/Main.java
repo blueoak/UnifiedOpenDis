@@ -519,7 +519,7 @@ public class Main
                 sb.setLength(sb.length() - 2);
             sb.append(";\n");
 
-            sb.append(String.format(bitsetTemplate2,clsName,clsName,clsName));
+            sb.append(String.format(bitsetTemplate2,clsName,el.size,clsName,clsName,clsName));
             
             // save file
             File target = new File(outputDirectory, clsName + ".java");

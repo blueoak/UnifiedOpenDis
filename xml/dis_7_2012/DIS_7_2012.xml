@@ -1050,19 +1050,19 @@
         </attribute>
     
         <attribute name="category" comment="category of entity">
-            <sisoenum type="Category" comment="not single enum"/>
+            <primitive type="uint8"/>
         </attribute>
     
-        <attribute name="subcategory" comment="subcategory of entity">
-            <sisoenum type="SubCategory" comment="not single enum"/>
+        <attribute name="subCategory" comment="subcategory based on category">
+            <primitive type="uint8"/>
         </attribute>
     
-        <attribute name="specific" comment="specific info based on subcategory field. Renamed from specific because that is a reserved word in SQL.">
-            <sisoenum type="Specific" comment="not single enum"/>
+        <attribute name="specific" comment="specific info based on subcategory">
+            <primitive type="uint8"/>
         </attribute>
     
         <attribute name="extra">
-            <sisoenum type="Extra" comment="not single enum"/>
+            <primitive type="uint8"/>
         </attribute>
     
     </class>
@@ -1085,7 +1085,7 @@
             <primitive type="uint8"/>
         </attribute>
     
-        <attribute name="subcategory" comment="subcategory of entity">
+        <attribute name="subCategory" comment="subcategory of entity">
             <primitive type="uint8"/>
         </attribute>
     
@@ -2016,11 +2016,11 @@
         </attribute>
 
         <attribute name="category" comment="category of entity">
-            <sisoenum type="Category" comment="not single enum"/>
+            <primitive type="uint8"/>
         </attribute>
     
         <attribute name="subcategory" comment="subcategory of entity">
-            <sisoenum type="SubCategory" comment="not single enum"/>
+            <primitive type="uint8"/>
         </attribute>
 
     </class>

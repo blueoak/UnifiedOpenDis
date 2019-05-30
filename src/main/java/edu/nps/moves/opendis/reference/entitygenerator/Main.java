@@ -154,9 +154,9 @@ public class Main
     private void loadEnumTemplates()
     {
         try {
-            entityClassTemplate = loadOneTemplate("jammerclass.txt");
-            entityBaseTemplate = loadOneTemplate("jammerbase.txt");
-            entityEnumTemplate = loadOneTemplate("jammerenum.txt");
+            entityClassTemplate = loadOneTemplate("class.txt");
+            entityBaseTemplate = loadOneTemplate("base.txt");
+            entityEnumTemplate = loadOneTemplate("enum.txt");
             entityTypeTemplate = loadOneTemplate("entitytype.txt");
         }
         catch (Exception ex) {
@@ -174,6 +174,9 @@ public class Main
         String description;
         String pkgFromDescription;
         String enumFromDescription;
+        ArrayList<DescriptionElem> children = new ArrayList<>();
+        String value;
+        String uid;
     }
 
     class EntityElem
@@ -187,32 +190,24 @@ public class Main
 
     class CategoryElem extends DescriptionElem
     {
-        String value;
-        String uid;
-        ArrayList<SubCategoryElem> subcategories = new ArrayList<>();
+        //ArrayList<SubCategoryElem> subcategories = new ArrayList<>();
         EntityElem parent;
     }
 
     class SubCategoryElem extends DescriptionElem
     {
-        String value;
-        String uid;
-        ArrayList<SpecificElem> specifics = new ArrayList<>();
+        //ArrayList<SpecificElem> specifics = new ArrayList<>();
         CategoryElem parent;
     }
 
     class SpecificElem extends DescriptionElem
     {
-        String value;
-        String uid;
-        ArrayList<ExtraElem> extras = new ArrayList<>();
+        //ArrayList<ExtraElem> extras = new ArrayList<>();
         SubCategoryElem parent;
     }
 
     class ExtraElem extends DescriptionElem
     {
-        String value;
-        String uid;
         SpecificElem parent;
     }
 
@@ -286,10 +281,10 @@ public class Main
                     currentSubCategory = new SubCategoryElem();
                     currentSubCategory.value = attributes.getValue("value");
                     currentSubCategory.description = attributes.getValue("description");
-                    setUniquePkgAndEmail(currentSubCategory, (List) currentCategory.subcategories);
+                    setUniquePkgAndEmail(currentSubCategory, (List) currentCategory.children);
                     currentSubCategory.uid = attributes.getValue("uid");
                     currentSubCategory.parent = currentCategory;
-                    currentCategory.subcategories.add(currentSubCategory);
+                    currentCategory.children.add(currentSubCategory);
                     break;
 
                 case "specific_range":
@@ -302,10 +297,10 @@ public class Main
                     currentSpecific = new SpecificElem();
                     currentSpecific.value = attributes.getValue("value");
                     currentSpecific.description = attributes.getValue("description");
-                    setUniquePkgAndEmail(currentSpecific, (List) currentSubCategory.specifics);
+                    setUniquePkgAndEmail(currentSpecific, (List) currentSubCategory.children);
                     currentSpecific.uid = attributes.getValue("uid");
                     currentSpecific.parent = currentSubCategory;
-                    currentSubCategory.specifics.add(currentSpecific);
+                    currentSubCategory.children.add(currentSpecific);
                     break;
 
                 case "extra":
@@ -314,10 +309,10 @@ public class Main
                     currentExtra = new ExtraElem();
                     currentExtra.value = attributes.getValue("value");
                     currentExtra.description = attributes.getValue("description");
-                    setUniquePkgAndEmail(currentExtra, (List) currentSpecific.extras);
+                    setUniquePkgAndEmail(currentExtra, (List) currentSpecific.children);
                     currentExtra.uid = attributes.getValue("uid");
                     currentExtra.parent = currentSpecific;
-                    currentSpecific.extras.add(currentExtra);
+                    currentSpecific.children.add(currentExtra);
                     break;
 
                 default:
@@ -351,7 +346,7 @@ public class Main
 
                     case "category":
                         if (currentCategory != null) {
-                            if (currentCategory.subcategories.isEmpty())
+                            if (currentCategory.children.isEmpty())
                                 writeFile(currentCategory);
                             else
                                 writeBaseClasses(currentCategory);
@@ -366,7 +361,7 @@ public class Main
 
                     case "subcategory":
                         if (currentSubCategory != null) {
-                            if (currentSubCategory.specifics.isEmpty())
+                            if (currentSubCategory.children.isEmpty())
                                 writeFile(currentSubCategory);
                             else
                                 writeBaseClasses(currentSubCategory);
@@ -376,7 +371,7 @@ public class Main
 
                     case "specific":
                         if (currentSpecific != null) {
-                            if (currentSpecific.extras.isEmpty())
+                            if (currentSpecific.children.isEmpty())
                                 writeFile(currentSpecific);
                             else
                                 writeBaseClasses(currentSpecific);
@@ -412,31 +407,6 @@ public class Main
                 }
             }
         }
-    }
-
-    private void setUniquePkgAndEmail(DescriptionElem elem, List<DescriptionElem> lis)
-    {
-        String mangledDescription = fixName(elem.description);
-        mangledDescription = makeUnique(mangledDescription, lis);
-        elem.pkgFromDescription = mangledDescription;
-        elem.enumFromDescription = mangledDescription.toUpperCase();
-    }
-
-    private String makeUnique(String s, List<DescriptionElem> lis)
-    {
-        String news = s;
-        for (int i = 1; i < 1000; i++) {
-            outer:
-            {
-                for (DescriptionElem hd : lis) {
-                    if (hd.pkgFromDescription.equalsIgnoreCase(news))
-                        break outer;
-                }
-                return news;
-            }
-            news = s + i;
-        }
-        throw new RuntimeException("Problem generating unique name for " + s);
     }
 
     private void writeBaseClasses(EntityElem ent) throws Exception
@@ -491,142 +461,77 @@ public class Main
         ent.categories.forEach((cat) -> {
             String nm = cat.enumFromDescription;
             if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
+                sb.append("    public static final byte ");
                 sb.append(nm);
-                sb.append(" (");
-                sb.append(cat.value);
-                sb.append(", \"");
-                sb.append(cat.description.replace('"', '\''));
-                sb.append("\"),\n");
+                sb.append(" = ");
+                sb.append(possiblyCast2Byte(cat.value));
+                sb.append("; // ");
+                sb.append(cat.description); //.replace('"', '\''));
+                sb.append("\n");
             }
         });
         sb.setLength(sb.length() - 2);
 
-        contents = String.format(entityEnumTemplate, pkg, "Category", "Category", sb.toString(), "Category", "Category", "Category", "Category");
+        contents = String.format(entityEnumTemplate, pkg, "Category", sb.toString());
         saveFile(dir, "Category.java", contents);
     }
-
+    
     private void writeBaseClasses(CategoryElem cat) throws Exception
     {
         StringBuilder sb = new StringBuilder();
         buildPackagePath(cat, sb);
-        File dir = new File(outputDirectory, sb.toString());
-        dir.mkdirs();
-
-        String pkg = basePackageName + "." + pathToPackage(sb.toString());
-        String pkgBackOne = parentPackage(pkg);
-        String subnm = cat.enumFromDescription; //fixName(cat.description).toUpperCase();
-
-        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "Category", pkgBackOne + ".Base", "Category", "Category", subnm);
-        saveFile(dir, "Base.java", contents);
-
-        if (cat.subcategories.isEmpty())
-            return;
-        sb.setLength(0);
-
-        cat.subcategories.forEach((subcat) -> {
-            String nm = subcat.enumFromDescription;
-            if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
-                sb.append(nm);
-                sb.append(" (");
-                sb.append(subcat.value);
-                sb.append(", \"");
-                sb.append(subcat.description.replace('"', '\''));
-                sb.append("\"),\n");
-            }
-        });
-        sb.setLength(sb.length() - 2);
-
-        contents = String.format(entityEnumTemplate, pkg, "SubCategory", "SubCategory", sb.toString(), "SubCategory", "SubCategory", "SubCategory", "SubCategory");
-        saveFile(dir, "SubCategory.java", contents);
+        writeBaseClasses(cat,sb,"Category","SubCategory");
     }
 
-    /*
-        private String makeUniqueEnum(String value, HashSet<String> set)
-        {
-            String ret = value;
-            int i=1;
-            while(set.contains(ret)){
-                ret = value+ i++;
-            }
-            set.add(ret);
-            return ret;
-        }
-     */
     private void writeBaseClasses(SubCategoryElem sub) throws Exception
     {
         StringBuilder sb = new StringBuilder();
         buildPackagePath(sub, sb);
-        File dir = new File(outputDirectory, sb.toString());
-        dir.mkdirs();
-
-        String pkg = basePackageName + "." + pathToPackage(sb.toString());
-        String pkgBackOne = parentPackage(pkg);
-        String subnm = sub.enumFromDescription;
-
-        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "SubCategory", pkgBackOne + ".Base", "Subcategory", "SubCategory", subnm);
-        saveFile(dir, "Base.java", contents);
-
-        if (sub.specifics.isEmpty())
-            return;
-        sb.setLength(0);
-
-        sub.specifics.forEach((extra) -> {
-            String nm = extra.enumFromDescription;
-            if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
-                sb.append(nm);
-                sb.append(" (");
-                sb.append(extra.value);
-                sb.append(", \"");
-                sb.append(extra.description.replace('"', '\''));
-                sb.append("\"),\n");
-            }
-        });
-
-        sb.setLength(sb.length() - 2);
-
-        contents = String.format(entityEnumTemplate, pkg, "Specific", "Specific", sb.toString(), "Specific", "Specific", "Specific", "Specific");
-        saveFile(dir, "Specific.java", contents);
+        writeBaseClasses(sub,sb, "SubCategory", "Specific");
     }
 
     private void writeBaseClasses(SpecificElem spec) throws Exception
     {
         StringBuilder sb = new StringBuilder();
         buildPackagePath(spec, sb);
+        writeBaseClasses(spec,sb, "Specific", "Extra");
+    }
+
+    private void writeBaseClasses(DescriptionElem elem, StringBuilder sb, String className, String classNameBelow)
+    {
         File dir = new File(outputDirectory, sb.toString());
         dir.mkdirs();
 
         String pkg = basePackageName + "." + pathToPackage(sb.toString());
         String pkgBackOne = parentPackage(pkg);
-        String specnm = fixName(spec.description).toUpperCase();
+        String subnm = elem.enumFromDescription; //fixName(cat.description).toUpperCase();
 
-        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, "Specific", pkgBackOne + ".Base", "Specific", "Specific", specnm);
+        String contents = String.format(entityBaseTemplate, pkg, pkgBackOne, className, pkgBackOne + ".Base", className, className, subnm);
         saveFile(dir, "Base.java", contents);
 
-        if (spec.extras.isEmpty())
+        if (elem.children.isEmpty())
             return;
         sb.setLength(0);
 
-        spec.extras.forEach((extra) -> {
-            String nm = fixName(extra.description).toUpperCase();
+        elem.children.forEach((child) -> {
+            String nm = child.enumFromDescription;
             if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
+                sb.append("    public static final byte ");
                 sb.append(nm);
-                sb.append(" (");
-                sb.append(extra.value);
-                sb.append(", \"");
-                sb.append(extra.description.replace('"', '\''));
-                sb.append("\"),\n");
+                sb.append(" = ");
+                sb.append(possiblyCast2Byte(child.value));
+                sb.append("; // ");
+                sb.append(child.description); //.replace('"', '\''));
+                sb.append("\n");
             }
         });
         sb.setLength(sb.length() - 2);
 
-        contents = String.format(entityEnumTemplate, pkg, "Extra", "Extra", sb.toString(), "Extra", "Extra", "Extra", "Extra");
-        saveFile(dir, "Extra.java", contents);
+        contents = String.format(entityEnumTemplate, pkg, classNameBelow, sb.toString());
+        saveFile(dir, classNameBelow+".java", contents);
     }
 
+    //todo refactor for code reuse ala writeBaseClasses
     private void writeFile(CategoryElem cat) throws Exception
     {
         StringBuilder sb = new StringBuilder();
@@ -661,7 +566,7 @@ public class Main
 
         String specEnum = classNm.toUpperCase();
 
-        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Subcategory", "SubCategory", specEnum);
+        String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "SubCategory", "SubCategory", specEnum);
         saveFile(dir, classNm + ".java", contents);
     }
 
@@ -682,7 +587,6 @@ public class Main
 
         String contents = String.format(entityClassTemplate, pkg, classNm, classNm, "Specific", "Specific", specEnum);
         saveFile(dir, classNm + ".java", contents);
-
     }
 
     private void writeFile(ExtraElem extra) throws Exception
@@ -716,6 +620,40 @@ public class Main
             throw new RuntimeException("Error saving "+name+": "+ex.getLocalizedMessage(), ex);
         }
     }
+    
+    private String possiblyCast2Byte(String s)
+    {
+        if(s == null) 
+            return "0";
+        int i = Integer.parseInt(s);
+        return (i > Byte.MAX_VALUE)? "(byte)"+s : s;
+    }
+
+    private void setUniquePkgAndEmail(DescriptionElem elem, List<DescriptionElem> lis)
+    {
+        String mangledDescription = fixName(elem.description);
+        mangledDescription = makeUnique(mangledDescription, lis);
+        elem.pkgFromDescription = mangledDescription;
+        elem.enumFromDescription = mangledDescription.toUpperCase();
+    }
+
+    private String makeUnique(String s, List<DescriptionElem> lis)
+    {
+        String news = s;
+        for (int i = 1; i < 1000; i++) {
+            outer:
+            {
+                for (DescriptionElem hd : lis) {
+                    if (hd.pkgFromDescription.equalsIgnoreCase(news))
+                        break outer;
+                }
+                return news;
+            }
+            news = s + i;
+        }
+        throw new RuntimeException("Problem generating unique name for " + s);
+    }
+
     Pattern regex = Pattern.compile("\\((.*?)\\)");
 
     private String buildCountryPackagePart(String s)

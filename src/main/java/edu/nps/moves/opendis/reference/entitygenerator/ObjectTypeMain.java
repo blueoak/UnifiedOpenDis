@@ -130,9 +130,9 @@ public class ObjectTypeMain
     private void loadEnumTemplates()
     {
         try {
-            classTemplate = loadOneTemplate("jammerclass.txt");
-            categoryBaseTemplate = loadOneTemplate("jammerbase.txt");
-            enumTemplate = loadOneTemplate("jammerenum.txt");
+            classTemplate = loadOneTemplate("class.txt");
+            categoryBaseTemplate = loadOneTemplate("base.txt");
+            enumTemplate = loadOneTemplate("enum.txt");
             cotBaseTemplate = loadOneTemplate("objecttypebase.txt");
             objectBaseTemplate = loadOneTemplate("objecttypeobj.txt");           
         }
@@ -376,19 +376,19 @@ public class ObjectTypeMain
 
         obj.categories.forEach((cat) -> {
             String nm = cat.enumFromDescription;
-            if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
+            if (!(nm.equals("DEPRECATED"))) {           
+                sb.append("    public static final byte ");
                 sb.append(nm);
-                sb.append(" (");
-                sb.append(cat.value);
-                sb.append(", \"");
-                sb.append(cat.description.replace('"', '\''));
-                sb.append("\"),\n");
+                sb.append(" = ");
+                sb.append(possiblyCast2Byte(cat.value));
+                sb.append("; // ");
+                sb.append(cat.description); //.replace('"', '\''));
+                sb.append("\n");
             }
         });
         sb.setLength(sb.length() - 2);
 
-        contents = String.format(enumTemplate, pkg, "Category", "Category", sb.toString(), "Category", "Category", "Category", "Category");
+        contents = String.format(enumTemplate, pkg, "Category", sb.toString());
         saveFile(dir, "Category.java", contents);
     }
 
@@ -413,21 +413,27 @@ public class ObjectTypeMain
         cat.subcategories.forEach((subcat) -> {
             String nm = subcat.enumFromDescription;
             if (!(nm.equals("DEPRECATED"))) {
-                sb.append("    ");
+                sb.append("    public static final byte ");
                 sb.append(nm);
-                sb.append(" (");
-                sb.append(subcat.value);
-                sb.append(", \"");
-                sb.append(subcat.description.replace('"', '\''));
-                sb.append("\"),\n");
+                sb.append(" = ");
+                sb.append(possiblyCast2Byte(subcat.value));
+                sb.append("; // ");
+                sb.append(subcat.description); //.replace('"', '\''));
+                sb.append("\n");
             }
         });
         sb.setLength(sb.length() - 2);
 
-        contents = String.format(enumTemplate, pkg, "SubCategory", "SubCategory", sb.toString(), "SubCategory", "SubCategory", "SubCategory", "SubCategory");
+        contents = String.format(enumTemplate, pkg, "SubCategory", sb.toString());
         saveFile(dir, "SubCategory.java", contents);
     }
-
+    
+    private String possiblyCast2Byte(String s)
+    {
+        int i = Integer.parseInt(s);
+        return (i > Byte.MAX_VALUE)? "(byte)"+s : s;
+    }
+    
     private void writeFile(CategoryElem cat) throws Exception
     {
         StringBuilder sb = new StringBuilder();

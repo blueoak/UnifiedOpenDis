@@ -25,7 +25,7 @@
 
   public %s()
   {
-    super(16); // length from bitfield element
+    super(%s); // length from bitfield element
   }
 
   public %s set(Bits wh, int val) throws EnumNotFoundException
@@ -47,4 +47,10 @@
     return this;
   }
 
+  // Some bitfields are defined without specific bits enumerated 
+  public %s set(int start, int length, int val)
+  {
+      setbits(start,length,val);
+      return this;
+  }
 }

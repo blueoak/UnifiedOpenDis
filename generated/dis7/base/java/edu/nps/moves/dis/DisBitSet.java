@@ -40,11 +40,15 @@ public abstract class DisBitSet extends BitSet implements Marshaller
     }
 
     protected void setbits(int pos, int len, int val)
-    {
+    {try{
         for (int i = pos, j = 0; i < pos + len; i++, j++) {
             boolean isset = (val & (1 << j)) != 0;
             set(i, i + 1, isset); // BitSet class
         }
+    }
+    catch(Throwable t) {
+        t.printStackTrace();
+    }
     }
 
     public byte[] marshall()
