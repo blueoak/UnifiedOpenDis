@@ -87,7 +87,7 @@ public class NullFieldsMarshallTest
         System.out.println("LAV_105 domain: "+et.getDomain());
         System.out.println("LAV_105 entity kind: "+et.getEntityKind());
         System.out.println("LAV_105 category: "+et.getCategory());
-        System.out.println("LAV_105 subcategory: "+et.getSubcategory());
+        System.out.println("LAV_105 subcategory: "+et.getSubCategory());
         System.out.println("LAV_105 specific: "+et.getSpecific());
         System.out.println("LAV_105 extra: "+et.getExtra());
     }
