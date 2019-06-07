@@ -139,16 +139,18 @@ public class Main
 
     private void run() throws SAXException, IOException, ParserConfigurationException
     {
-        loadEnumTemplates();
-        buildKindDomainCountryInstances();
-
-        MyHandler handler = new MyHandler();
-
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
         factory.setXIncludeAware(true);
-        factory.newSAXParser().parse(new File(xmlPath), handler);
+        
+        System.out.println("listing uids: ");
+        factory.newSAXParser().parse(new File(xmlPath), new UidListHandler());
+        
+        loadEnumTemplates();
+        buildKindDomainCountryInstances();
+        System.out.println("Generating entities: ");
+        factory.newSAXParser().parse(new File(xmlPath), new MyHandler());
     }
 
     private void loadEnumTemplates()
@@ -211,6 +213,19 @@ public class Main
         SpecificElem parent;
     }
 
+    public class UidListHandler extends DefaultHandler
+    {
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+        {
+            String uid = attributes.getValue("uid");
+            if(uid != null) {
+                String name = attributes.getValue("name");
+                System.out.println(uid+"\t"+name+"\t("+qName+")");
+            }
+        }
+    }
+    
     public class MyHandler extends DefaultHandler
     {
         ArrayList<EntityElem> entities = new ArrayList<>();
@@ -850,6 +865,7 @@ public class Main
         // Java identifier can't start with digit
         if (Character.isDigit(r.charAt(0)))
             r = "_" + r;
+        System.out.println("In: "+s+" out: "+r);
         return r;
     }
 

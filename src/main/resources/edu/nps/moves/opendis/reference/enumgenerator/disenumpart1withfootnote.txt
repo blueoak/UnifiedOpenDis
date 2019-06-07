@@ -10,7 +10,9 @@ import edu.nps.moves.dis.*;
 /**
  * Generated from XML, %s<br>
  * %s marshal size %s<br>
+ * %s<br>
  * %s
  */
 public enum %s implements Marshaller%s
 {
+

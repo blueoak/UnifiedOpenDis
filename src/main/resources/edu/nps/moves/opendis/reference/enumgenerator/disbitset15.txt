@@ -1,1 +1,1 @@
-    %s(%s, %s),
+  public static Bits %s = new Bits(%s, %s);

@@ -5,6 +5,7 @@
  */
 package edu.nps.moves.opendis.reference.entitygenerator;
 
+//import edu.nps.moves.dis.enumerations.LandPlatformAppearance;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,6 +49,12 @@ public class JammerMain
 
     private void run() throws SAXException, IOException, ParserConfigurationException
     {
+/*        LandPlatformAppearance e = new LandPlatformAppearance();
+LandPlatformAppearance.Bits en = LandPlatformAppearance.Bits.TRAILING_DUST_CLOUD;
+Class c = en.cls;
+Enum<?> nuts = (Enum<?>)c.getEnumConstants()[0];
+     System.out.println("nuts");   
+*/        
         MyHandler handler = new MyHandler();
 
         SAXParserFactory factory = SAXParserFactory.newInstance();

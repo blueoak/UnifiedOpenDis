@@ -379,7 +379,7 @@ public void writeObjcFile(GeneratedClass aClass)
     }
 }
 
-/**
+/*
  * Write the code for an equality operator. This allows you to compare
  * two objects for equality.
  * The code should look like

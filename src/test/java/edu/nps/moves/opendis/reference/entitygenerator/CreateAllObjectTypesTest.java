@@ -39,7 +39,7 @@ public class CreateAllObjectTypesTest
     {
         Throwable ex = null;
         try {
-            dumpObjectType(new edu.nps.moves.dis.objecttypes.ObjectTypes_PointObject.Tacticalsmoke.Other());
+          dumpObjectType(new edu.nps.moves.dis.objecttypes.ObjectTypes_PointObject.Tacticalsmoke.Other());
             dumpObjectType(new edu.nps.moves.dis.objecttypes.ObjectTypes_PointObject.Tacticalsmoke.GroundBurst.Other());
             dumpObjectType(new edu.nps.moves.dis.objecttypes.ObjectTypes_PointObject.Tacticalsmoke.GroundBurst.Artillery());
             dumpObjectType(new edu.nps.moves.dis.objecttypes.ObjectTypes_PointObject.Tacticalsmoke.AirBurst.Other());

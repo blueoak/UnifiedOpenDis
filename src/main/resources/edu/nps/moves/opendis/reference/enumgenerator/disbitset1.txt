@@ -1,11 +1,11 @@
-/* Generated from the XML, %s */
 package %s;
 
 import edu.nps.moves.dis.*;
-import java.lang.reflect.Method;
 
-/* %s marshal size %s */
-public class %s extends DisBitSet
+/**
+ * Generated from XML, %s<br>
+ * %s marshal size %s<br>
+ * %s
+ */
+public class %s extends DisBitSet %s
 {
-  public enum Bits {
-
