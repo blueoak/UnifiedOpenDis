@@ -70,7 +70,7 @@
         <initialValue name="pduType" value="DISPDUType.MINEFIELD_QUERY"/>
          
         <attribute name="minefieldID" comment="Minefield ID">
-            <classRef name= "EntityID"/>
+            <classRef name= "MinefieldIdentifier"/>
         </attribute>
        
         <attribute name="requestingEntityID" comment="EID of entity making the request">
