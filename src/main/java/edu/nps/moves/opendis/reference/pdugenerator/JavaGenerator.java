@@ -535,9 +535,12 @@ public class JavaGenerator extends Generator
 
             // The attribute is a class of some sort. Generate getters and setters.
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-                pw.println("public void set" + this.initialCap(anAttribute.getName()) + "(" + anAttribute.getType() + " p" + this.initialCap(anAttribute.getName()) + ")");
-                pw.println("{\n    " + anAttribute.getName() + " = p" + this.initialCap(anAttribute.getName()) + "; \n}");
-
+                pw.print("public ");
+                pw.print(aClass.getName());
+                pw.println(" set" + this.initialCap(anAttribute.getName()) + "(" + anAttribute.getType() + " p" + this.initialCap(anAttribute.getName()) + ")");
+                pw.println("{\n    " + anAttribute.getName() + " = p" + this.initialCap(anAttribute.getName()) + ";");
+                pw.println("    return this;");
+                pw.println("}");
                 pw.println();
 
                 pw.println("public " + anAttribute.getType() + " get" + this.initialCap(anAttribute.getName()) + "()");
