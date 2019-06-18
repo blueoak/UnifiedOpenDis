@@ -2025,7 +2025,8 @@
 
     </class>
 
-    <class name="OwnershipStatus" inheritsFrom="root"
+<!-- add "Record" to the end to avoid name collision with OwnershipStatus, uid=332 -->
+    <class name="OwnershipStatusRecord" inheritsFrom="root"
            comment="used to convey entity and conflict status information associated with transferring ownership of an entity. Section 6.2.65">
 
         <attribute name="entityId" comment="EntityID">
