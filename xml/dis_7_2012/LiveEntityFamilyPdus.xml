@@ -178,7 +178,7 @@
         </attribute>
         
         <attribute name="eventId">
-            <classRef name="EntityID"/>
+            <classRef name="EventIdentifier"/>
         </attribute>
         
         <attribute name="location">
@@ -224,7 +224,7 @@
         </attribute>
         
         <attribute name="eventId">
-            <classRef name="EntityID"/>
+            <classRef name="EventIdentifier"/>
         </attribute>
         
         <attribute name="worldLocation">
